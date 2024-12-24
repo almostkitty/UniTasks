@@ -34,6 +34,14 @@ class AlienInvasion:
         self._create_fleet()
         self.play_button = Button(self, "Play")
 
+        # Загрузка фонового изображения, если оно есть
+        try:
+            self.background_image = pygame.image.load(self.settings.background_image)
+            self.settings.background_rect = self.background_image.get_rect()
+        except pygame.error:
+            print("Ошибка загрузки фонового изображения, будет использован стандартный цвет фона.")
+            self.background_image = None
+
     def _create_fleet(self):
         alien = Alien(self)
         alien_width, alien_height = alien.rect.size
@@ -165,7 +173,7 @@ class AlienInvasion:
 
     def _update_screen(self):
         """Обновляет изображения на экране и отображает новый экран."""
-        self.screen.fill(self.settings.bg_color)
+        self.screen.blit(self.background_image, self.settings.background_rect)
         self.ship.blitme()
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
