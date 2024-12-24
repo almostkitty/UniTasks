@@ -117,10 +117,6 @@ class AlienInvasion:
 
             self._update_screen()
 
-            # При каждом проходе цикла перерисавывается экран.
-            self.screen.fill(self.settings.bg_color)
-            self.ship.blitme()
-
             # Отображение последнего прорисованного экрана.
             pygame.display.flip()
 

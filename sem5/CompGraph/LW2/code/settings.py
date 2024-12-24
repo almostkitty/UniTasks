@@ -13,7 +13,7 @@ class Settings:
         self.ship_limit = 3
 
         # Настройки пришельцев
-        self.alien_speed = 1.0
+        self.alien_speed = 0.7
         self.fleet_drop_speed = 10
 
         # Темп ускорения игры
