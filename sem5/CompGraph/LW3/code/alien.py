@@ -9,7 +9,7 @@ class Alien(Sprite):
         self.settings = ai_game.settings
         
         # https://opengameart.org/content/spaceships-32x32 - спрайты корабля
-        self.image = pygame.image.load('images/ship_3.bmp')
+        self.image = pygame.image.load('resources/images/ship_3.bmp')
         self.rect = self.image.get_rect()
 
         self.rect.x = self.rect.width

@@ -16,18 +16,18 @@ import random
 pygame.init()
 pygame.mixer.init()
 
-laser_sound = pygame.mixer.Sound("sounds/peew.wav")
-alien_explosion_sound = pygame.mixer.Sound("sounds/ufo.wav")
-life_lost_sound = pygame.mixer.Sound("sounds/life.wav")
-game_over_sound = pygame.mixer.Sound("sounds/end.wav")
+laser_sound = pygame.mixer.Sound("resources/sounds/peew.wav")
+alien_explosion_sound = pygame.mixer.Sound("resources/sounds/ufo.wav")
+life_lost_sound = pygame.mixer.Sound("resources/sounds/life.wav")
+game_over_sound = pygame.mixer.Sound("resources/sounds/end.wav")
 
-def save_game(data, filename="savefile.pkl"):
+def save_game(data, filename="resources/saves/savefile.pkl"):
     """Сохраняет данные игры в файл."""
     with open(filename, "wb") as f:
         pickle.dump(data, f)
     print("Игра сохранена.")
 
-def load_game(filename="savefile.pkl"):
+def load_game(filename="resources/saves/savefile.pkl"):
     """Загружает данные игры из файла."""
     try:
         with open(filename, "rb") as f:

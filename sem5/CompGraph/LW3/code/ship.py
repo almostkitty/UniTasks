@@ -14,7 +14,7 @@ class Ship(Sprite):
 
         # Загружает изображение корабля и получает прямоугольник.
         # https://opengameart.org/content/spaceships-32x32 - спрайты корабля
-        self.image = pygame.image.load('images/ship_5.bmp')
+        self.image = pygame.image.load('resources/images/ship_5.bmp')
         self.rect = self.image.get_rect()
         # Каждый новый корабль появляется у нижнего края экрана
         self.rect.midbottom = self.screen_rect.midbottom

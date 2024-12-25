@@ -9,7 +9,7 @@ class Settings:
         self.bg_color = (230, 230, 230)
 
         # Параметры для фонового изображения
-        self.background_image = 'images/bg.png'
+        self.background_image = 'resources/images/bg.png'
         self.background_rect = None
 
         # Настройка корабля

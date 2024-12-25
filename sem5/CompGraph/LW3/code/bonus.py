@@ -13,7 +13,7 @@ class Bonus(pygame.sprite.Sprite):
         # Сердечки https://goblin-mode-games.itch.io/pixel-art-heart-capsules
         # Пузырьки https://verysmallsquares.itch.io/16
 
-        self.image = pygame.image.load(f"images/{bonus_type}_bonus.bmp")
+        self.image = pygame.image.load(f"resources/images/{bonus_type}_bonus.bmp")
         self.rect = self.image.get_rect()
         self.rect.x = random.randint(0, self.screen.get_width() - self.rect.width)
         self.rect.y = 0  # Бонус появляется сверху
