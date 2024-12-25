@@ -10,6 +10,6 @@
 
 ### Задания:
 
-![Задание №1](images/first_task.png)
-![Задание №2](images/second_task.png)
-![Задание №3](images/third_task.png)
+![Задание №1](images/task_1.png)
+![Задание №2](images/task_2.png)
+![Задание №3](images/task_3.png)
