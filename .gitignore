@@ -2,3 +2,9 @@ venv/
 .venv/
 .DS_Store
 .idea
+.o
+.pyc
+.so
+.c
+.pbtxt
+.pb
