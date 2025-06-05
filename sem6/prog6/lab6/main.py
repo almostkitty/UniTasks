@@ -1,76 +1,106 @@
-import math
 import timeit
+import time
+import os
 import matplotlib.pyplot as plt
+from cy_fermat import fermat_factorization as cy_fact
+from ferma_fact import fermat_factorization as py_fact
+import concurrent.futures as cf
 
 
-"""
-Время вычислений (Baseline)  = 229.25 секунд
-
-Шаг 1. Оставив представленный ниже код, переписать функции для нахождения чисел с помощью Cython, 
-запустить timeit с аналогичными параметрами и сравнить два варианта, построить график.
-С помощью annotate=True сгенерируйте html (где визуализировано взаимодействие с Python-интерпретатором) и приложите его к отчету. 
-"""
-
-"""
-Шаг 2. Создать механизм распределения вычислений так, чтобы массив данных для вычисления распределялся
-на несколько "вычислителей" и каждый вычислитель считал свое /map-reduce
-
-1. Определить параметры: количество вычислителей, их тип (поток, процесс) и распределить по
- соответствующим очередям какие значения какому вычислителю идут. 
-2. Отправить по очереди значения и дождаться пока все вычислители закончат работу
-3. Оценить работу программы с потоками и процессами
-"""
-
-def is_perfect_square(n):
-    """Проверяет, является ли число полным квадратом."""
-    root = int(math.isqrt(n))
-    return root * root == n
+TEST_LST = [101, 9973, 104729, 101909, 609133, 1300039, 9999991,
+            99999959, 99999971, 3000009, 700000133]
 
 
-def fermat_factorization(N):
-    """Разложение числа N на множители методом Ферма."""
-    if N % 2 == 0:
-        return 2, N // 2  # Если N четное, делим на 2
+workers = os.cpu_count() or 4  # 4 - дефолтное
 
-    x = math.isqrt(N) + 1  # Начинаем с ближайшего целого числа к √N
-    while True:
-        y_squared = x * x - N
-        if is_perfect_square(y_squared):
-            y = int(math.isqrt(y_squared))
-            return (x - y, x + y)  # Возвращаем найденные множители
-        x += 1  # Увеличиваем x
-
-
-# Пример использования
-if __name__ == '__main__':
-    TEST_LST = [101, 9973, 104729, 101909, 609133, 1300039, 9999991, 99999959, 99999971, 3000009,
-                700000133]
-
-    time_cy = timeit.repeat("res = [fermat_factorization(i) for i in TEST_LST]",
-                  setup='from cy_fermat import fermat_factorization\n'
-                  'TEST_LST = [101, 9973, 104729, 101909, 609133, 1300039, '
-                  '9999991, 99999959, 99999971, 3000009, 700000133]',
-                  number=10, repeat=5)
+def run_parallel(func, data, workers, mode='thread'):
+    if mode == 'thread':
+        Executor = cf.ThreadPoolExecutor
+    elif mode == 'process':
+        Executor = cf.ProcessPoolExecutor
+    else:
+        raise ValueError("Аргумент 'thread' или 'process'")
     
+    with Executor(max_workers=workers) as executor:
+        start = time.time()
+        list(executor.map(func, data))
+        duration = time.time() - start
+    return duration
+
+def plot_baseline():
+    print("Шаг 1: Замер времени обычной и Cython-реализаций")
+    time_cy = timeit.repeat(
+        "res = [fermat_factorization(i) for i in TEST_LST]",
+        setup='from cy_fermat import fermat_factorization\n'
+              'TEST_LST = [101, 9973, 104729, 101909, 609133, 1300039, '
+              '9999991, 99999959, 99999971, 3000009, 700000133]',
+        number=2,
+        repeat=3
+    )
+
+    time_py = timeit.repeat(
+        "res = [fermat_factorization(i) for i in TEST_LST]",
+        setup='from ferma_fact import fermat_factorization\n'
+              'TEST_LST = [101, 9973, 104729, 101909, 609133, 1300039, '
+              '9999991, 99999959, 99999971, 3000009, 700000133]',
+        number=2,
+        repeat=3
+    )
+
     print("Cython время:", time_cy)
-
-    time_py = timeit.repeat("res = [fermat_factorization(i) for i in TEST_LST]",
-                  setup='from main import fermat_factorization\n'
-                  'TEST_LST = [101, 9973, 104729, 101909, 609133, 1300039, '
-                  '9999991, 99999959, 99999971, 3000009, 700000133]',
-                  number=10, repeat=5)
-
     print("Python время:", time_py)
 
+    mean_cy = sum(time_cy) / len(time_cy)
+    mean_py = sum(time_py) / len(time_py)
 
-    plt.figure(figsize=(12, 6))
-    plt.plot(range(1, len(time_cy) + 1), time_cy, label='Cython', marker='o', color='b')
-    plt.plot(range(1, len(time_py) + 1), time_py, label='Python', marker='x', color='r')
+    bars = plt.bar(['Python', 'Cython'], [mean_py, mean_cy])
+    plt.title('Сравнение времени выполнения: Python vs Cython')
+    plt.ylabel('Время (сек)')
+    plt.grid(axis='y', linestyle='--', alpha=0.7)
 
-    plt.title('Python vs Cython')
-    plt.xlabel('Повтор')
-    plt.ylabel('Время выполнения, сек.')
-    plt.legend()
-    plt.grid(True)
+    for bar in bars:
+        height = bar.get_height()
+        plt.text(bar.get_x() + bar.get_width() / 2, height * 1.01,
+                f'{height:.3f} с', ha='center', va='bottom', fontsize=10)
 
-    plt.savefig('1.png', dpi=300)
+    plt.tight_layout()
+    plt.savefig("test_1.png", dpi=300)
+
+def plot_parallel():
+    print("Шаг 2: Параллельные вычисления потоками и процессами")
+
+    results = []
+
+    t1 = run_parallel(cy_fact, TEST_LST, mode='thread', workers=workers)
+    results.append(("Cython потоки", t1))
+
+    t2 = run_parallel(cy_fact, TEST_LST, mode='process', workers=workers)
+    results.append(("Cython процессы", t2))
+
+    t3 = run_parallel(py_fact, TEST_LST, mode='thread', workers=workers)
+    results.append(("Python потоки", t3))
+
+    t4 = run_parallel(py_fact, TEST_LST, mode='process', workers=workers)
+    results.append(("Python процессы", t4))
+
+    labels = [label for label, _ in results]
+    times = [t for _, t in results]
+
+    plt.figure(figsize=(10, 5))
+    bars = plt.bar(labels, times)
+
+    for bar in bars:
+        height = bar.get_height()
+        plt.text(bar.get_x() + bar.get_width()/2, height * 1.01,
+                 f'{height:.2f} с', ha='center', va='bottom')
+
+    plt.title(f'Сравнение потоков и процессов (workers={workers})')
+    plt.ylabel('Время выполнения (сек)')
+    plt.xticks(rotation=15)
+    plt.grid(axis='y', linestyle='--', alpha=0.6)
+    plt.tight_layout()
+    plt.savefig('test_2.png', dpi=300)
+
+if __name__ == '__main__':
+    plot_baseline()
+    plot_parallel()
