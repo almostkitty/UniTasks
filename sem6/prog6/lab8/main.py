@@ -37,8 +37,8 @@ def highlightFace(net, frame, conf_threshold=0.7):
     return frameOpencvDnn, faceBoxes
 
 # пути к файлам нейросетей для распознавания лиц, пола и возраста
-faceProto="nets/opencv_face_detector.pbtxt"
-faceModel="nets/opencv_face_detector_uint8.pb"
+faceProto = "nets/opencv_face_detector.pbtxt"
+faceModel = "nets/opencv_face_detector_uint8.pb"
 genderProto = "nets/gender_deploy.prototxt"
 genderModel = "nets/gender_net.caffemodel"
 ageProto = "nets/age_deploy.prototxt"
@@ -134,7 +134,7 @@ elif choice == "2":
             )
 
         # показываем результат и ждём нажатия клавиши
-        cv2.imshow("Detecting age and gender", resultImg)
+        cv2.imshow("Face detection", resultImg)
         cv2.waitKey(0)
         cv2.destroyAllWindows()
         exit(0)
