@@ -1,0 +1,25 @@
+version: "3"
+
+services:
+  web_1:
+    build: .
+    ports:
+      - "80:8000"
+    depends_on:
+      - redis
+    environment:
+      - REDIS_HOST=redis
+      - EMOJI=🐄
+
+  web_2:
+    build: .
+    ports:
+      - "81:8000"
+    depends_on:
+      - redis
+    environment:
+      - REDIS_HOST=redis
+      - EMOJI=🥩
+
+  redis:
+    image: redis
