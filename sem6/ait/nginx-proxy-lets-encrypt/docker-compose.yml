@@ -1,0 +1,47 @@
+version: '2'
+
+services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - vhost:/etc/nginx/vhost.d
+      - conf:/etc/nginx/conf.d
+      - html:/usr/share/nginx/html
+      - certs:/etc/nginx/certs:ro
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+
+  acme-companion:
+      image: nginxproxy/acme-companion
+      container_name: nginx-proxy-acme
+      environment:
+        - DEFAULT_EMAIL=mail@yourdomain.tld
+      volumes_from:
+        - nginx-proxy
+      volumes:
+        - certs:/etc/nginx/certs:rw
+        - acme:/etc/acme.sh
+        - /var/run/docker.sock:/var/run/docker.sock:ro
+
+  whoami1:
+    image: jwilder/whoami
+    environment:
+      - VIRTUAL_HOST=whoami1.almostkitty.ru
+      - LETSENCRYPT_HOST=whoami1.almostkitty.ru
+      - LETSENCRYPT_EMAIL=palchukgerman@gmail.com
+
+  whoami2:
+    image: jwilder/whoami
+    environment:
+      - VIRTUAL_HOST=whoami2.almostkitty.ru
+      - LETSENCRYPT_HOST=whoami2.almostkitty.ru
+      - LETSENCRYPT_EMAIL=palchukgerman@gmail.com
+
+volumes:
+    vhost:
+    conf:
+    html:
+    certs:
+    acme:
