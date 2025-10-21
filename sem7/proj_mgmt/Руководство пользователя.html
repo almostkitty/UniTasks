@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Руководство пользователя.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="%D1%80%D1%83%D0%BA%D0%BE%D0%B2%D0%BE%D0%B4%D1%81%D1%82%D0%B2%D0%BE-%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8F">Руководство пользователя</h1>
+<h2 id="%D0%B2%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%B8%D0%B5">Введение</h2>
+<p>Данное руководство предназначено для пользователей конфигурации 1С для ветеринарной клиники.<br>
+В документе описаны доступные роли (<strong>Администратор</strong>, <strong>Покупка</strong>, <strong>Продажа</strong>), а также функционал каждой из них.<br>
+Здесь вы найдете инструкции по работе с основными разделами программы и ответы на часто задаваемые вопросы (FAQ).</p>
+<h2 id="%D0%BE%D0%B3%D0%BB%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5">Оглавление</h2>
+<ul>
+<li><a href="#%D0%B2%D1%85%D0%BE%D0%B4-%D0%B2-%D0%BF%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D1%83">Вход в программу</a></li>
+<li><a href="#%D1%80%D1%83%D0%BA%D0%BE%D0%B2%D0%BE%D0%B4%D1%81%D1%82%D0%B2%D0%BE-%D0%B4%D0%BB%D1%8F-%D0%B0%D0%B4%D0%BC%D0%B8%D0%BD%D0%B8%D1%81%D1%82%D1%80%D0%B0%D1%82%D0%BE%D1%80%D0%B0-%D0%BF%D0%BE%D0%BB%D0%BD%D1%8B%D0%B9-%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%BE%D0%BD%D0%B0%D0%BB">Руководство для администратора. Полный функционал</a>
+<ul>
+<li><a href="#%D1%80%D0%B0%D0%B7%D0%B4%D0%B5%D0%BB-%D0%BF%D0%BE%D0%BA%D1%83%D0%BF%D0%BA%D0%B0">Раздел &quot;Покупка&quot;</a>
+<ul>
+<li><a href="#%D0%BB%D0%B5%D0%BA%D0%B0%D1%80%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D1%8B%D0%B5-%D1%81%D1%80%D0%B5%D0%B4%D1%81%D1%82%D0%B2%D0%B0">Лекарственные средства</a></li>
+<li><a href="#%D0%BF%D0%BE%D1%81%D1%82%D1%83%D0%BF%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5-%D0%BB%D0%B5%D0%BA%D0%B0%D1%80%D1%81%D1%82%D0%B2">Поступление лекарств</a></li>
+<li><a href="#%D0%BF%D1%80%D0%BE%D0%B8%D0%B7%D0%B2%D0%BE%D0%B4%D1%81%D1%82%D0%B2%D0%BE-%D0%BA%D0%BE%D0%BC%D0%BF%D0%BB%D0%B5%D0%BA%D1%82%D0%B0%D1%86%D0%B8%D1%8F">Производство комплектация</a></li>
+<li><a href="#%D1%86%D0%B5%D0%BD%D1%8B-%D0%BD%D0%B0-%D0%BB%D0%B5%D0%BA%D0%B0%D1%80%D1%81%D1%82%D0%B2%D0%B0">Цены на лекарства</a></li>
+<li><a href="#%D0%BE%D1%82%D1%87%D1%91%D1%82%D1%8B">Отчёты</a></li>
+</ul>
+</li>
+<li><a href="#%D1%80%D0%B0%D0%B7%D0%B4%D0%B5%D0%BB-%D0%BF%D1%80%D0%BE%D0%B4%D0%B0%D0%B6%D0%B0">Раздел &quot;Продажа&quot;</a>
+<ul>
+<li><a href="#%D0%B0%D0%BC%D0%B1%D1%83%D0%BB%D0%B0%D1%82%D0%BE%D1%80%D0%BD%D1%8B%D0%B9-%D0%BF%D1%80%D0%B8%D1%91%D0%BC">Амбулаторный приём</a></li>
+<li><a href="#%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D1%8B-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%BE%D0%B2">Документы клиентов</a></li>
+<li><a href="#%D0%BB%D0%B5%D0%BA%D0%B0%D1%80%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D1%8B%D0%B5-%D1%81%D1%80%D0%B5%D0%B4%D1%81%D1%82%D0%B2%D0%B0-1">Лекарственные средства</a></li>
+<li><a href="#%D0%BF%D0%B0%D1%86%D0%B8%D0%B5%D0%BD%D1%82%D1%8B">Пациенты</a></li>
+<li><a href="#%D0%BF%D1%80%D0%BE%D0%B4%D0%B0%D0%B6%D0%B0-%D0%BB%D0%B5%D0%BA%D0%B0%D1%80%D1%81%D1%82%D0%B2">Продажа лекарств</a></li>
+<li><a href="#%D0%BF%D1%80%D0%BE%D1%86%D0%B5%D0%B4%D1%83%D1%80%D0%B0">Процедура</a></li>
+<li><a href="#%D1%83%D1%80%D0%BE%D0%B2%D0%BD%D0%B8-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%BE%D0%B2">Уровни клиентов</a></li>
+<li><a href="#%D1%83%D1%81%D0%BB%D0%BE%D0%B2%D0%B8%D1%8F-%D1%80%D0%B0%D1%81%D1%81%D1%80%D0%BE%D1%87%D0%BA%D0%B8">Условия рассрочки</a></li>
+<li><a href="#%D1%85%D0%B0%D1%80%D0%B0%D0%BA%D1%82%D0%B5%D1%80%D0%B8%D1%81%D1%82%D0%B8%D0%BA%D0%B8-%D0%BB%D0%B5%D0%BA%D0%B0%D1%80%D1%81%D1%82%D0%B2-1">Характеристики лекарств</a></li>
+<li><a href="#%D1%86%D0%B5%D0%BD%D1%8B-%D0%BD%D0%B0-%D0%BB%D0%B5%D0%BA%D0%B0%D1%80%D1%81%D1%82%D0%B2%D0%B0-1">Цены на лекарства</a></li>
+<li><a href="#%D0%BE%D1%82%D1%87%D0%B5%D1%82%D1%8B-1">Отчеты</a></li>
+<li><a href="#%D1%81%D0%B5%D1%80%D0%B2%D0%B8%D1%81">Сервис</a></li>
+</ul>
+</li>
+<li><a href="#%D1%80%D0%B0%D0%B7%D0%B4%D0%B5%D0%BB-%D0%BF%D1%80%D0%BE%D1%87%D0%B5%D0%B5">Раздел «Прочее»</a></li>
+</ul>
+</li>
+<li><a href="#%D1%80%D1%83%D0%BA%D0%BE%D0%B2%D0%BE%D0%B4%D1%81%D1%82%D0%B2%D0%BE-%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8F">Руководство пользователя</a>
+<ul>
+<li><a href="#%D1%80%D0%BE%D0%BB%D1%8C-%D0%BF%D0%BE%D0%BA%D1%83%D0%BF%D0%BA%D0%B0">Роль Покупка</a>
+<ul>
+<li><a href="#%D0%B4%D0%BE%D0%B1%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5-%D0%BD%D0%BE%D0%B2%D0%BE%D0%B3%D0%BE-%D0%BB%D0%B5%D0%BA%D0%B0%D1%80%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE-%D1%81%D1%80%D0%B5%D0%B4%D1%81%D1%82%D0%B2%D0%B0">Добавление нового лекарственного средства</a></li>
+<li><a href="#%D0%B8%D0%B7%D0%BC%D0%B5%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5-%D0%BB%D0%B5%D0%BA%D0%B0%D1%80%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE-%D1%81%D1%80%D0%B5%D0%B4%D1%81%D1%82%D0%B2%D0%B0">Изменение лекарственного средства</a></li>
+<li><a href="#%D0%BF%D0%BE%D1%81%D1%82%D1%83%D0%BF%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5-%D0%BB%D0%B5%D0%BA%D0%B0%D1%80%D1%81%D1%82%D0%B2-1">Поступление лекарств</a></li>
+<li><a href="#%D0%BD%D0%BE%D0%B2%D0%BE%D0%B5-%D0%BF%D0%BE%D1%81%D1%82%D1%83%D0%BF%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5-%D0%BB%D0%B5%D0%BA%D0%B0%D1%80%D1%81%D1%82%D0%B2">Новое поступление лекарств</a></li>
+<li><a href="#%D1%86%D0%B5%D0%BD%D1%8B-%D0%BD%D0%B0-%D0%BB%D0%B5%D0%BA%D0%B0%D1%80%D1%81%D1%82%D0%B2%D0%B0-2">Цены на лекарства</a></li>
+<li><a href="#%D0%B8%D0%B7%D0%BC%D0%B5%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5-%D1%86%D0%B5%D0%BD%D1%8B-%D0%BB%D0%B5%D0%BA%D0%B0%D1%80%D1%81%D1%82%D0%B2%D0%B0">Изменение цены лекарства</a></li>
+<li><a href="#%D1%84%D0%BE%D1%80%D0%BC%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5-%D0%BE%D1%82%D1%87%D0%B5%D1%82%D0%BE%D0%B2">Формирование отчетов</a></li>
+<li><a href="#%D0%BF%D0%B5%D1%87%D0%B0%D1%82%D1%8C-%D0%BE%D1%82%D1%87%D0%B5%D1%82%D0%BE%D0%B2">Печать отчетов</a></li>
+<li><a href="#%D0%BF%D1%80%D0%BE%D1%81%D0%BC%D0%BE%D1%82%D1%80-%D0%B8%D1%81%D1%82%D0%BE%D1%80%D0%B8%D0%B8">Просмотр истории</a></li>
+<li><a href="#%D0%B7%D0%B0%D0%B2%D0%B5%D1%80%D1%88%D0%B5%D0%BD%D0%B8%D0%B5-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B">Завершение работы</a></li>
+</ul>
+</li>
+<li><a href="#%D1%80%D0%BE%D0%BB%D1%8C-%D0%BF%D1%80%D0%BE%D0%B4%D0%B0%D0%B6%D0%B0">Роль Продажа</a>
+<ul>
+<li><a href="#%D0%B4%D0%BE%D0%B1%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B0%D0%BC%D0%B1%D1%83%D0%BB%D0%B0%D1%82%D0%BE%D1%80%D0%BD%D0%BE%D0%B3%D0%BE-%D0%BF%D1%80%D0%B8%D0%B5%D0%BC%D0%B0">Добавление амбулаторного приема</a></li>
+<li><a href="#%D0%BF%D0%B5%D1%87%D0%B0%D1%82%D1%8C-%D0%B8-%D1%81%D0%BE%D1%85%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5">Печать и сохранение</a></li>
+<li><a href="#%D0%B8%D0%B7%D0%BC%D0%B5%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B0%D0%BC%D0%B1%D1%83%D0%BB%D0%B0%D1%82%D0%BE%D1%80%D0%BD%D0%BE%D0%B3%D0%BE-%D0%BF%D1%80%D0%B8%D0%B5%D0%BC%D0%B0">Изменение амбулаторного приема</a></li>
+<li><a href="#%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D0%BC%D0%B8-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%BE%D0%B2-%D0%BB%D0%B5%D0%BA%D0%B0%D1%80%D1%81%D1%82%D0%B2%D0%B0%D0%BC%D0%B8-%D0%BF%D0%B0%D1%86%D0%B8%D0%B5%D0%BD%D1%82%D0%B0%D0%BC%D0%B8">Работа с документами клиентов, лекарствами, пациентами</a></li>
+<li><a href="#%D0%BF%D1%80%D0%BE%D0%B4%D0%B0%D0%B6%D0%B0-%D0%BB%D0%B5%D0%BA%D0%B0%D1%80%D1%81%D1%82%D0%B2-1">Продажа лекарств</a></li>
+<li><a href="#%D0%BF%D1%80%D0%BE%D1%86%D0%B5%D0%B4%D1%83%D1%80%D1%8B-%D1%83%D1%80%D0%BE%D0%B2%D0%BD%D0%B8-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%BE%D0%B2-%D1%80%D0%B0%D1%81%D1%81%D1%80%D0%BE%D1%87%D0%BA%D0%B0-%D1%85%D0%B0%D1%80%D0%B0%D0%BA%D1%82%D0%B5%D1%80%D0%B8%D1%81%D1%82%D0%B8%D0%BA%D0%B8-%D1%86%D0%B5%D0%BD%D1%8B">Процедуры, уровни клиентов, рассрочка, характеристики, цены</a></li>
+<li><a href="#%D1%84%D0%BE%D1%80%D0%BC%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5-%D0%B8-%D0%BF%D0%B5%D1%87%D0%B0%D1%82%D1%8C-%D0%BE%D1%82%D1%87%D1%91%D1%82%D0%BE%D0%B2">Формирование и печать отчётов</a></li>
+<li><a href="#%D0%BF%D1%80%D0%BE%D1%81%D0%BC%D0%BE%D1%82%D1%80-%D0%B8%D1%81%D1%82%D0%BE%D1%80%D0%B8%D0%B8-%D0%B8-%D0%B7%D0%B0%D0%B2%D0%B5%D1%80%D1%88%D0%B5%D0%BD%D0%B8%D0%B5-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B">Просмотр истории и завершение работы</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#faq">FAQ</a></li>
+</ul>
+<hr>
+<h2 id="%D0%B2%D1%85%D0%BE%D0%B4-%D0%B2-%D0%BF%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D1%83">Вход в программу</h2>
+<p>При запуске программы открывается окно выбора <strong>Роли</strong>. Выбор осуществляется через выпадающий список. Доступны следующие роли: <strong>Админ</strong>, <strong>Покупка</strong>, <strong>Продажа</strong>. Ниже расположено поле ввода пароля.</p>
+<p>Далее рассмотрим функционал каждой роли отдельно.</p>
+<hr>
+<h1 id="%D1%80%D1%83%D0%BA%D0%BE%D0%B2%D0%BE%D0%B4%D1%81%D1%82%D0%B2%D0%BE-%D0%B4%D0%BB%D1%8F-%D0%B0%D0%B4%D0%BC%D0%B8%D0%BD%D0%B8%D1%81%D1%82%D1%80%D0%B0%D1%82%D0%BE%D1%80%D0%B0-%D0%BF%D0%BE%D0%BB%D0%BD%D1%8B%D0%B9-%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%BE%D0%BD%D0%B0%D0%BB">Руководство для администратора. Полный функционал</h1>
+<p>Администратору доступен полный функционал программы. Он может работать с разделами: <strong>Покупка</strong>, <strong>Продажа</strong>, <strong>Прочее</strong>.</p>
+<p>После входа открывается <strong>Главное меню</strong>. В верхней панели находятся четыре раздела: <strong>Главное</strong>, <strong>Покупка</strong>, <strong>Продажа</strong>, <strong>Прочее</strong>. Ещё выше расположены разделы <strong>Уведомления</strong>, <strong>История</strong> и кнопка выхода из программы.</p>
+<hr>
+<h3 id="%D1%80%D0%B0%D0%B7%D0%B4%D0%B5%D0%BB-%22%D0%BF%D0%BE%D0%BA%D1%83%D0%BF%D0%BA%D0%B0%22">Раздел &quot;Покупка&quot;</h3>
+<p>Вкладка <strong>Покупка</strong> содержит следующие разделы:</p>
+<ul>
+<li><strong>Лекарственные средства</strong></li>
+<li><strong>Поступление лекарств</strong></li>
+<li><strong>Цены на лекарства</strong></li>
+<li>Кнопка <strong>Отчёты</strong></li>
+</ul>
+<h4 id="%D0%BB%D0%B5%D0%BA%D0%B0%D1%80%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D1%8B%D0%B5-%D1%81%D1%80%D0%B5%D0%B4%D1%81%D1%82%D0%B2%D0%B0">Лекарственные средства</h4>
+<p>Доступна таблица с описанием товара, его кодом и ценой. Существующие записи можно редактировать. Для добавления нового нажмите <strong>Создать</strong>. При создании нового лекарства или редактировании существующего можно добавить файл картинки.</p>
+<h4 id="%D0%BF%D0%BE%D1%81%D1%82%D1%83%D0%BF%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5-%D0%BB%D0%B5%D0%BA%D0%B0%D1%80%D1%81%D1%82%D0%B2">Поступление лекарств</h4>
+<p>Содержит список поступлений. Чтобы просмотреть подробности, двойным кликом выберите нужное поступление. Отобразится информация: номер поступления, дата, название препарата, количество, цена и сумма.</p>
+<h4 id="%D0%BF%D1%80%D0%BE%D0%B8%D0%B7%D0%B2%D0%BE%D0%B4%D1%81%D1%82%D0%B2%D0%BE-%D0%BA%D0%BE%D0%BC%D0%BF%D0%BB%D0%B5%D0%BA%D1%82%D0%B0%D1%86%D0%B8%D1%8F">Производство комплектация</h4>
+<p>Содержит список производств. Для добавления нового нажмите <strong>Создать</strong>. При создании надо указать номенклатуру, единицу измерения и количество.</p>
+<h4 id="%D1%86%D0%B5%D0%BD%D1%8B-%D0%BD%D0%B0-%D0%BB%D0%B5%D0%BA%D0%B0%D1%80%D1%81%D1%82%D0%B2%D0%B0">Цены на лекарства</h4>
+<p>Доступна таблица с текущими ценами на товары.</p>
+<h4 id="%D0%BE%D1%82%D1%87%D1%91%D1%82%D1%8B">Отчёты</h4>
+<p>При нажатии кнопки <strong>Отчёты</strong> доступны пункты <strong>Остатки лекарств</strong> и <strong>Остатки номенклатуры отчет</strong>. В открывшемся окне можно сгенерировать отчёт с информацией об остатках препаратов.</p>
+<hr>
+<h3 id="%D1%80%D0%B0%D0%B7%D0%B4%D0%B5%D0%BB-%C2%AB%D0%BF%D1%80%D0%BE%D0%B4%D0%B0%D0%B6%D0%B0%C2%BB">Раздел «Продажа»</h3>
+<p>Вкладка <strong>Продажа</strong> содержит следующие разделы:</p>
+<ul>
+<li>Амбулаторный приём</li>
+<li>Документы клиентов</li>
+<li>Лекарственные средства</li>
+<li>Пациенты</li>
+<li>Продажа лекарств</li>
+<li>Производство комплектация</li>
+<li>Процедура</li>
+<li>Уровни клиентов</li>
+<li>Условия рассрочки</li>
+<li>Характеристики лекарств</li>
+<li>Цены на лекарства</li>
+</ul>
+<h4 id="%D0%B0%D0%BC%D0%B1%D1%83%D0%BB%D0%B0%D1%82%D0%BE%D1%80%D0%BD%D1%8B%D0%B9-%D0%BF%D1%80%D0%B8%D1%91%D0%BC">Амбулаторный приём</h4>
+<p>Таблица с информацией о приёмах: дата, номер, клиент, процедура, дата следующего приёма, жалобы, стоимость, скидка, итоговая стоимость, рассрочка. Записи можно редактировать и добавлять новые.</p>
+<h4 id="%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D1%8B-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%BE%D0%B2">Документы клиентов</h4>
+<p>Содержит описание документов о продаже лекарств клиентам.</p>
+<h4 id="%D0%BB%D0%B5%D0%BA%D0%B0%D1%80%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D1%8B%D0%B5-%D1%81%D1%80%D0%B5%D0%B4%D1%81%D1%82%D0%B2%D0%B0">Лекарственные средства</h4>
+<p>Доступна таблица с описанием товара, его кодом и ценой. Существующие записи можно редактировать. Для добавления нового нажмите <strong>Создать</strong>. При создании нового лекарства или редактировании существующего можно добавить файл картинки.</p>
+<h4 id="%D0%BF%D0%B0%D1%86%D0%B8%D0%B5%D0%BD%D1%82%D1%8B">Пациенты</h4>
+<p>Таблица с данными пациентов: ФИО, код, дата рождения, вид животного, кличка, уровень клиента. Записи можно редактировать или добавлять новые.</p>
+<h4 id="%D0%BF%D1%80%D0%BE%D0%B8%D0%B7%D0%B2%D0%BE%D0%B4%D1%81%D1%82%D0%B2%D0%BE-%D0%BA%D0%BE%D0%BC%D0%BF%D0%BB%D0%B5%D0%BA%D1%82%D0%B0%D1%86%D0%B8%D1%8F">Производство комплектация</h4>
+<p>Содержит список производств. Для добавления нового нажмите <strong>Создать</strong>. При создании надо указать номенклатуру, единицу измерения и количество.</p>
+<h4 id="%D0%BF%D1%80%D0%BE%D0%B4%D0%B0%D0%B6%D0%B0-%D0%BB%D0%B5%D0%BA%D0%B0%D1%80%D1%81%D1%82%D0%B2">Продажа лекарств</h4>
+<p>Раздел содержит информацию о продажах.</p>
+<h4 id="%D0%BF%D1%80%D0%BE%D1%86%D0%B5%D0%B4%D1%83%D1%80%D0%B0">Процедура</h4>
+<p>Таблица с перечнем процедур: название, код, стоимость.</p>
+<h4 id="%D1%83%D1%80%D0%BE%D0%B2%D0%BD%D0%B8-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%BE%D0%B2">Уровни клиентов</h4>
+<p>Список из 4 уровней, которые можно присваивать клиентам.</p>
+<h4 id="%D1%83%D1%81%D0%BB%D0%BE%D0%B2%D0%B8%D1%8F-%D1%80%D0%B0%D1%81%D1%81%D1%80%D0%BE%D1%87%D0%BA%D0%B8">Условия рассрочки</h4>
+<p>Доступны оптовая и розничная рассрочка. Для каждой указаны процент и срок.</p>
+<h4 id="%D1%85%D0%B0%D1%80%D0%B0%D0%BA%D1%82%D0%B5%D1%80%D0%B8%D1%81%D1%82%D0%B8%D0%BA%D0%B8-%D0%BB%D0%B5%D0%BA%D0%B0%D1%80%D1%81%D1%82%D0%B2">Характеристики лекарств</h4>
+<p>Таблица с описательными характеристиками лекарств: форма выпуска, размер упаковки и др.</p>
+<h4 id="%D1%86%D0%B5%D0%BD%D1%8B-%D0%BD%D0%B0-%D0%BB%D0%B5%D0%BA%D0%B0%D1%80%D1%81%D1%82%D0%B2%D0%B0">Цены на лекарства</h4>
+<p>Таблица с информацией о ценах.</p>
+<h4 id="%D0%BE%D1%82%D1%87%D0%B5%D1%82%D1%8B">Отчеты</h4>
+<p>Позволяет формировать отчёты <strong>Продажи лекарств</strong> (информация о клиентах, купленных препаратах, количестве и сумме) и <strong>Остатки номенклатуры отчет</strong> (информация о номенклатуре и количестве остатоков)</p>
+<h4 id="%D1%81%D0%B5%D1%80%D0%B2%D0%B8%D1%81">Сервис</h4>
+<p>Позволяет добавить нового врача в систему через соответствующее окно.</p>
+<h3 id="%D1%80%D0%B0%D0%B7%D0%B4%D0%B5%D0%BB-%C2%AB%D0%BF%D1%80%D0%BE%D1%87%D0%B5%D0%B5%C2%BB">Раздел «Прочее»</h3>
+<p>Содержит разделы: <strong>Документы клиентов</strong>, <strong>Единицы измерения</strong>, <strong>Значение характеристик</strong>, <strong>Значения свойств лекарств</strong>, <strong>Номенклатура</strong> ,<strong>Свойства лекарств</strong>, <strong>Характеристики лекарств</strong> и кнопку <strong>Сервис</strong>.</p>
+<hr>
+<h1 id="%D1%80%D1%83%D0%BA%D0%BE%D0%B2%D0%BE%D0%B4%D1%81%D1%82%D0%B2%D0%BE-%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8F">Руководство пользователя</h1>
+<h2 id="%D1%80%D0%BE%D0%BB%D1%8C-%D0%BF%D0%BE%D0%BA%D1%83%D0%BF%D0%BA%D0%B0">Роль Покупка</h2>
+<h3 id="%D0%B4%D0%BE%D0%B1%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5-%D0%BD%D0%BE%D0%B2%D0%BE%D0%B3%D0%BE-%D0%BB%D0%B5%D0%BA%D0%B0%D1%80%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE-%D1%81%D1%80%D0%B5%D0%B4%D1%81%D1%82%D0%B2%D0%B0">Добавление нового лекарственного средства</h3>
+<p>Перейдите во вкладку <strong>Лекарственные средства</strong>, нажмите <strong>Создать</strong>, укажите название товара, цену и код (опционально), затем нажмите <strong>Записать и закрыть</strong>.
+<img src="gif/1.1.gif" alt=""></p>
+<h3 id="%D0%B8%D0%B7%D0%BC%D0%B5%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5-%D0%BB%D0%B5%D0%BA%D0%B0%D1%80%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE-%D1%81%D1%80%D0%B5%D0%B4%D1%81%D1%82%D0%B2%D0%B0">Изменение лекарственного средства</h3>
+<p>Вкладка <strong>Лекарственные средства</strong>, двойной клик по нужной записи, внесите изменения и нажмите <strong>Записать и закрыть</strong>.
+<img src="gif/1.2.gif" alt=""></p>
+<h3 id="%D0%BF%D0%BE%D1%81%D1%82%D1%83%D0%BF%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5-%D0%BB%D0%B5%D0%BA%D0%B0%D1%80%D1%81%D1%82%D0%B2">Поступление лекарств</h3>
+<p>Вкладка <strong>Поступление лекарств</strong>, двойной клик по поступлению позволяет просмотреть подробности.
+<img src="gif/1.3.gif" alt=""></p>
+<h3 id="%D0%BD%D0%BE%D0%B2%D0%BE%D0%B5-%D0%BF%D0%BE%D1%81%D1%82%D1%83%D0%BF%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5-%D0%BB%D0%B5%D0%BA%D0%B0%D1%80%D1%81%D1%82%D0%B2">Новое поступление лекарств</h3>
+<p>Вкладка <strong>Поступление лекарств</strong>, нажмите <strong>Создать</strong>, укажите номер и дату поступления. Используйте кнопку <strong>Добавить</strong>, затем <strong>Показать все</strong>, выберите препарат и нажмите <strong>Выбрать</strong>. Для добавления дополнительных препаратов повторите шаги. После заполнения нажмите <strong>Провести и закрыть</strong>.
+<img src="gif/1.4.gif" alt=""></p>
+<h3 id="%D1%86%D0%B5%D0%BD%D1%8B-%D0%BD%D0%B0-%D0%BB%D0%B5%D0%BA%D0%B0%D1%80%D1%81%D1%82%D0%B2%D0%B0">Цены на лекарства</h3>
+<p>Вкладка <strong>Цены на лекарства</strong>, двойной клик по препарату для просмотра деталей.
+<img src="gif/1.5.gif" alt=""></p>
+<h3 id="%D0%B8%D0%B7%D0%BC%D0%B5%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5-%D1%86%D0%B5%D0%BD%D1%8B-%D0%BB%D0%B5%D0%BA%D0%B0%D1%80%D1%81%D1%82%D0%B2%D0%B0">Изменение цены лекарства</h3>
+<p>Нажмите <strong>Создать</strong>, укажите период и цену, выберите препарат через <strong>Показать все</strong> → <strong>Выбрать</strong>, затем нажмите <strong>Записать и закрыть</strong>.
+<img src="gif/1.6.gif" alt=""></p>
+<h3 id="%D1%84%D0%BE%D1%80%D0%BC%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5-%D0%BE%D1%82%D1%87%D0%B5%D1%82%D0%BE%D0%B2">Формирование отчетов</h3>
+<p>Кнопка <strong>Отчёты</strong> → <strong>Остатки лекарств</strong>, нажмите <strong>Сформировать</strong> для генерации таблицы.
+<img src="gif/1.7.gif" alt=""></p>
+<h3 id="%D0%BF%D0%B5%D1%87%D0%B0%D1%82%D1%8C-%D0%BE%D1%82%D1%87%D0%B5%D1%82%D0%BE%D0%B2">Печать отчетов</h3>
+<p>Для сохранения или печати отчетов необходимо сначала их сформировать (см. раздел <strong>Формирование отчетов</strong>). После формирования доступны кнопки <strong>Сохранить</strong>, <strong>Печать</strong> и <strong>Предварительный просмотр</strong>. Выберите нужное действие.
+<img src="gif/1.8.gif" alt=""></p>
+<h3 id="%D0%BF%D1%80%D0%BE%D1%81%D0%BC%D0%BE%D1%82%D1%80-%D0%B8%D1%81%D1%82%D0%BE%D1%80%D0%B8%D0%B8">Просмотр истории</h3>
+<p>Для просмотра истории, нажмите на кнопку с часами, расположенную в верхнем правом углу. Откроется окно, где можно посмотреть последние действия. Указан тип действия, время и дата. Для того, чтобы закрыть историю, нажмите на крестик справа от поля поиска.
+<img src="gif/1.9.gif" alt=""></p>
+<h3 id="%D0%B7%D0%B0%D0%B2%D0%B5%D1%80%D1%88%D0%B5%D0%BD%D0%B8%D0%B5-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B">Завершение работы</h3>
+<p>Для завершения работы выберите <strong>Покупка</strong> → <strong>Завершить работу (Выйти)</strong>.
+<img src="gif/1.10.gif" alt=""></p>
+<hr>
+<h2 id="%D1%80%D0%BE%D0%BB%D1%8C-%D0%BF%D1%80%D0%BE%D0%B4%D0%B0%D0%B6%D0%B0">Роль Продажа</h2>
+<h3 id="%D0%B4%D0%BE%D0%B1%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B0%D0%BC%D0%B1%D1%83%D0%BB%D0%B0%D1%82%D0%BE%D1%80%D0%BD%D0%BE%D0%B3%D0%BE-%D0%BF%D1%80%D0%B8%D0%B5%D0%BC%D0%B0">Добавление амбулаторного приема</h3>
+<p>Вкладка <strong>Амбулаторный приём</strong>, нажмите <strong>Создать</strong>, укажите дату, номер, стоимость, скидку, жалобы, дату следующего приёма. Добавьте клиента через <strong>Показать все</strong> или <strong>Создать</strong>. Заполните поля <strong>Процедура</strong> и <strong>Рассрочка</strong>, затем нажмите <strong>Провести и закрыть</strong>.
+<img src="gif/2.1.gif" alt=""></p>
+<h3 id="%D0%BF%D0%B5%D1%87%D0%B0%D1%82%D1%8C-%D0%B8-%D1%81%D0%BE%D1%85%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5">Печать и сохранение</h3>
+<p>Для печати: выберите запись, нажмите <strong>Печать</strong>, затем иконку принтера.<br>
+Для сохранения: выберите запись, нажмите <strong>Печать</strong>, затем иконку сохранения.
+<img src="gif/2.2.gif" alt=""></p>
+<h3 id="%D0%B8%D0%B7%D0%BC%D0%B5%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B0%D0%BC%D0%B1%D1%83%D0%BB%D0%B0%D1%82%D0%BE%D1%80%D0%BD%D0%BE%D0%B3%D0%BE-%D0%BF%D1%80%D0%B8%D1%91%D0%BC%D0%B0">Изменение амбулаторного приёма</h3>
+<p>Двойной клик по записи, внесите изменения и нажмите <strong>Провести и закрыть</strong>.
+<img src="gif/2.3.gif" alt=""></p>
+<h3 id="%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D0%BC%D0%B8-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%BE%D0%B2-%D0%BB%D0%B5%D0%BA%D0%B0%D1%80%D1%81%D1%82%D0%B2%D0%B0%D0%BC%D0%B8-%D0%BF%D0%B0%D1%86%D0%B8%D0%B5%D0%BD%D1%82%D0%B0%D0%BC%D0%B8">Работа с документами клиентов, лекарствами, пациентами</h3>
+<p>Создание новых записей через вкладку → <strong>Создать</strong> → заполнение полей → <strong>Записать и закрыть</strong>.<br>
+Изменение существующих записей через двойной клик → редактирование → <strong>Записать и закрыть</strong>.
+<img src="gif/2.4.gif" alt=""></p>
+<h3 id="%D0%BF%D1%80%D0%BE%D0%B4%D0%B0%D0%B6%D0%B0-%D0%BB%D0%B5%D0%BA%D0%B0%D1%80%D1%81%D1%82%D0%B2">Продажа лекарств</h3>
+<p>Вкладка <strong>Продажа лекарств</strong>, нажмите <strong>Создать</strong>, заполните поля с клиентом, датой и номером продажи. Добавьте препараты через кнопку <strong>Добавить</strong> и заполните поля, затем нажмите <strong>Записать</strong>.
+<img src="gif/2.5.gif" alt=""></p>
+<h3 id="%D0%BF%D1%80%D0%BE%D1%86%D0%B5%D0%B4%D1%83%D1%80%D1%8B-%D1%83%D1%80%D0%BE%D0%B2%D0%BD%D0%B8-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%BE%D0%B2-%D1%80%D0%B0%D1%81%D1%81%D1%80%D0%BE%D1%87%D0%BA%D0%B0-%D1%85%D0%B0%D1%80%D0%B0%D0%BA%D1%82%D0%B5%D1%80%D0%B8%D1%81%D1%82%D0%B8%D0%BA%D0%B8-%D1%86%D0%B5%D0%BD%D1%8B">Процедуры, уровни клиентов, рассрочка, характеристики, цены</h3>
+<p>Создание новых записей через вкладку → <strong>Создать</strong> → заполнение → <strong>Записать и закрыть</strong>.<br>
+Изменение существующих через двойной клик → редактирование → <strong>Записать и закрыть</strong>.
+<img src="gif/2.6.gif" alt=""></p>
+<h3 id="%D1%84%D0%BE%D1%80%D0%BC%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5-%D0%B8-%D0%BF%D0%B5%D1%87%D0%B0%D1%82%D1%8C-%D0%BE%D1%82%D1%87%D1%91%D1%82%D0%BE%D0%B2">Формирование и печать отчётов</h3>
+<p>Кнопка <strong>Отчёты</strong> → <strong>Продажи лекарств</strong>, нажмите <strong>Сформировать</strong>. Для печати или сохранения используйте кнопки справа: <strong>Сохранить</strong>, <strong>Печать</strong>, <strong>Предварительный просмотр</strong>.
+<img src="gif/2.7.gif" alt=""></p>
+<h3 id="%D1%81%D0%BE%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5-%D0%BD%D0%BE%D0%B2%D0%BE%D0%B9-%D0%B7%D0%B0%D0%BF%D0%B8%D1%81%D0%B8-%D0%B2%D1%80%D0%B0%D1%87%D0%B0-%D0%B2-%D1%81%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D0%B5">Создание новой записи врача в сервисе</h3>
+<p>Кнопка <strong>Сервис</strong> → <strong>Врач</strong>, внесите данные и нажмите <strong>Записать и закрыть</strong>.
+<img src="gif/2.10.gif" alt=""></p>
+<h3 id="%D0%BF%D1%80%D0%BE%D1%81%D0%BC%D0%BE%D1%82%D1%80-%D0%B8%D1%81%D1%82%D0%BE%D1%80%D0%B8%D0%B8-%D0%B8-%D0%B7%D0%B0%D0%B2%D0%B5%D1%80%D1%88%D0%B5%D0%BD%D0%B8%D0%B5-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B">Просмотр истории и завершение работы</h3>
+<p>Кнопка с часами → просмотр действий → закрыть крестиком.<br>
+Завершение работы: <strong>Продажа</strong> → <strong>Завершить работу (Выйти)</strong>.
+<img src="gif/2.8.gif" alt="">
+<img src="gif/2.9.gif" alt=""></p>
+<hr>
+<h1 id="faq">FAQ</h1>
+<h3 id="%D1%8F-%D0%BD%D0%B5-%D0%B2%D0%B8%D0%B6%D1%83-%D0%BE%D0%BF%D0%B8%D1%81%D0%B0%D0%BD%D0%BD%D1%8B%D0%B5-%D0%B2%D0%BA%D0%BB%D0%B0%D0%B4%D0%BA%D0%B8-%D0%B3%D0%B4%D0%B5-%D0%B8%D1%85-%D0%B8%D1%81%D0%BA%D0%B0%D1%82%D1%8C">Я не вижу описанные вкладки. Где их искать?</h3>
+<p>Иногда пользователи не видят все доступные вкладки. Для решения этой проблемы кнопка можно растянуть окно программы или открыть его в полноэкранном режиме. Также просмотреть не поместившиеся вкладки можно нажав на кнопку &quot;Еще&quot;.</p>
+<h3 id="%D1%8F-%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D0%BB-%D0%BE%D1%88%D0%B8%D0%B1%D0%BA%D1%83-%D0%B2-%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B5-%D0%BA%D0%B0%D0%BA-%D0%B5%D1%91-%D0%B8%D1%81%D0%BF%D1%80%D0%B0%D0%B2%D0%B8%D1%82%D1%8C">Я сделал ошибку в документе. Как её исправить?</h3>
+<p>Документ можно открыть двойным щелчком, внести изменения и нажать <strong>Записать и закрыть</strong>. Если документ уже проведён, используйте кнопку <strong>Отмена проведения</strong>, затем внесите исправления.</p>
+<h3 id="%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83-%D0%BD%D0%B5-%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B0%D1%8E%D1%82%D1%81%D1%8F-%D0%BD%D0%BE%D0%B2%D1%8B%D0%B5-%D0%B7%D0%B0%D0%BF%D0%B8%D1%81%D0%B8-%D0%B2-%D1%82%D0%B0%D0%B1%D0%BB%D0%B8%D1%86%D0%B5">Почему не отображаются новые записи в таблице?</h3>
+<p>Убедитесь, что запись была проведена и сохранена. Иногда требуется обновление вкладки или повторный вход в систему.</p>
+<h3 id="%D0%BA%D0%B0%D0%BA-%D0%B4%D0%BE%D0%B1%D0%B0%D0%B2%D0%B8%D1%82%D1%8C-%D0%BD%D0%BE%D0%B2%D1%8B%D0%B9-%D1%8D%D0%BB%D0%B5%D0%BC%D0%B5%D0%BD%D1%82-%D0%B2-%D0%B2%D1%8B%D0%BF%D0%B0%D0%B4%D0%B0%D1%8E%D1%89%D0%B8%D0%B9-%D1%81%D0%BF%D0%B8%D1%81%D0%BE%D0%BA-%D0%BD%D0%B0%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80-%D0%BF%D1%80%D0%BE%D1%86%D0%B5%D0%B4%D1%83%D1%80%D1%83-%D0%B8%D0%BB%D0%B8-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%B0">Как добавить новый элемент в выпадающий список (например, процедуру или клиента)?</h3>
+<p>Используйте кнопку <strong>Создать</strong> в соответствующем разделе. После заполнения полей нажмите <strong>Записать и закрыть</strong>, новый элемент появится в списке.</p>
+<h3 id="%D0%BF%D0%BE%D1%87%D0%B5%D0%BC%D1%83-%D0%BE%D1%82%D1%87%D1%91%D1%82-%D0%BD%D0%B5-%D1%84%D0%BE%D1%80%D0%BC%D0%B8%D1%80%D1%83%D0%B5%D1%82%D1%81%D1%8F-%D0%B8%D0%BB%D0%B8-%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B0%D0%B5%D1%82%D1%81%D1%8F-%D0%BF%D1%83%D1%81%D1%82%D1%8B%D0%BC">Почему отчёт не формируется или отображается пустым?</h3>
+<p>Проверьте выбранный период и фильтры. Убедитесь, что данные за этот период действительно существуют.</p>
+<hr>
+<p>Руководство подготовил: <strong>Пальчук Герман</strong></p>
+
+</body>
+</html>
