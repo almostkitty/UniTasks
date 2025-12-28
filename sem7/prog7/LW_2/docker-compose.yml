@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  news_parser:
+    build: .
+    ports:
+      - "5001:5001"
+    command: python services/news_parser/app.py
+    networks:
+      - news_network
+
+  sentiment_analyzer:
+    build: .
+    ports:
+      - "5002:5002"
+    command: python services/sentiment_analyzer/app.py
+    networks:
+      - news_network
+
+  categorizer:
+    build: .
+    ports:
+      - "5003:5003"
+    command: python services/categorizer/app.py
+    networks:
+      - news_network
+
+networks:
+  news_network:
+    driver: bridge
