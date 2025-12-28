@@ -1,0 +1,132 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Опросы</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}">
+    <style>
+        body {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+        }
+        .header h1 {
+            margin: 0;
+        }
+        .auth-links {
+            display: flex;
+            gap: 15px;
+        }
+        .auth-links a {
+            color: #4CAF50;
+            text-decoration: none;
+            padding: 8px 15px;
+            border: 1px solid #4CAF50;
+            border-radius: 4px;
+        }
+        .auth-links a:hover {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .create-poll-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+        .create-poll-link:hover {
+            background-color: #45a049;
+        }
+        .question-list {
+            list-style: none;
+            padding: 0;
+        }
+        .question-list li {
+            margin-bottom: 15px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            border-left: 4px solid #4CAF50;
+        }
+        .question-list li a {
+            color: #333;
+            text-decoration: none;
+            font-size: 18px;
+        }
+        .question-list li a:hover {
+            color: #4CAF50;
+        }
+        .messages {
+            margin-bottom: 20px;
+        }
+        .messages li {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            list-style: none;
+        }
+        .messages .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Опросы</h1>
+        <div class="auth-links">
+            {% if user.is_authenticated %}
+                <span>Привет, {{ user.username }}!</span>
+                <a href="{% url 'accounts:logout' %}">Выйти</a>
+            {% else %}
+                <a href="{% url 'accounts:login' %}">Войти</a>
+                <a href="{% url 'accounts:register' %}">Регистрация</a>
+            {% endif %}
+        </div>
+    </div>
+    
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    
+    {% if user.is_authenticated %}
+        <a href="{% url 'polls:create' %}" class="create-poll-link">+ Создать новый опрос</a>
+    {% else %}
+        <p style="padding: 15px; background-color: #fff3cd; border: 1px solid #ffc107; border-radius: 4px;">
+            <a href="{% url 'accounts:login' %}" style="color: #4CAF50; font-weight: bold;">Войдите</a> или 
+            <a href="{% url 'accounts:register' %}" style="color: #4CAF50; font-weight: bold;">зарегистрируйтесь</a>, 
+            чтобы создавать новые опросы.
+        </p>
+    {% endif %}
+    
+    {% if latest_question_list %}
+        <ul class="question-list">
+        {% for question in latest_question_list %}
+            <li><a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a></li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>Нет доступных опросов.</p>
+    {% endif %}
+</body>
+</html>
