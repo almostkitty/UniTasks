@@ -148,19 +148,19 @@
 ## Скриншоты
 
 1. Локальное тестирование сервисов
-![](/img/img1)
-![](/img/img2)
-![](/img/img3)
-![](/img/img4)
+![](img/img1.png)
+![](img/img2.png)
+![](img/img3.png)
+![](img/img4.png)
 
 2. Docker образы
-![](/img/img5)
+![](img/img5.png)
 
 3. Yandex Cloud
-![](/img/img6)
+![](img/img6.png)
 
 4. Работающие сервисы
-![](/img/img7)
+![](img/img7.png)
 
 5. Логи из Yandex Cloud
-![](/img/img8)
+![](img/img8.png)
