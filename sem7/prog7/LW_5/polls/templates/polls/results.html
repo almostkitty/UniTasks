@@ -1,0 +1,79 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Результаты опроса</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}">
+    <style>
+        body {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #4CAF50;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+        }
+        .results-list {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+        .results-list li {
+            padding: 15px;
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            border-left: 4px solid #4CAF50;
+        }
+        .vote-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+        .vote-link:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <a href="{% url 'polls:index' %}" class="back-link">← Вернуться к списку опросов</a>
+    
+    <h1>{{ question.question_text }}</h1>
+
+    <ul class="results-list">
+    {% for choice in question.choice_set.all %}
+        <li>
+            {{ choice.choice_text }} -- {{ choice.votes }} 
+            {% if choice.votes == 1 %}
+                голос
+            {% elif choice.votes >= 2 and choice.votes <= 4 %}
+                голоса
+            {% else %}
+                голосов
+            {% endif %}
+        </li>
+    {% endfor %}
+    </ul>
+
+    <a href="{% url 'polls:detail' question.id %}" class="vote-link">Голосовать снова?</a>
+</body>
+</html>

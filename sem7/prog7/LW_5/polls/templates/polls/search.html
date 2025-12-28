@@ -1,0 +1,414 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Поиск голосований</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        body {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+        }
+        .header h1 {
+            margin: 0;
+        }
+        .nav-links {
+            display: flex;
+            gap: 15px;
+        }
+        .nav-links a {
+            color: #4CAF50;
+            text-decoration: none;
+            padding: 8px 15px;
+            border: 1px solid #4CAF50;
+            border-radius: 4px;
+        }
+        .nav-links a:hover {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .container {
+            display: flex;
+            gap: 20px;
+        }
+        .search-panel {
+            flex: 1;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            min-width: 400px;
+        }
+        .stats-panel {
+            flex: 1;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            min-width: 500px;
+            min-height: 400px;
+        }
+        .search-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .form-group label {
+            font-weight: bold;
+            color: #333;
+        }
+        .form-group input,
+        .form-group select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .btn {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        .poll-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+        .poll-item {
+            padding: 15px;
+            background-color: white;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            border-left: 4px solid #4CAF50;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .poll-item:hover {
+            background-color: #f0f0f0;
+        }
+        .poll-item.selected {
+            background-color: #e8f5e9;
+            border-left-color: #2e7d32;
+        }
+        .poll-item h3 {
+            margin: 0 0 5px 0;
+            color: #333;
+        }
+        .poll-item p {
+            margin: 5px 0;
+            color: #666;
+            font-size: 14px;
+        }
+        .stats-content {
+            display: none;
+        }
+        .stats-content.active {
+            display: block;
+        }
+        .stats-header {
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .stats-header h2 {
+            margin: 0;
+            color: #2e7d32;
+        }
+        .stat-item {
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: white;
+            border-radius: 4px;
+        }
+        .stat-item strong {
+            color: #4CAF50;
+        }
+        .chart-container {
+            margin-top: 20px;
+            text-align: center;
+            position: relative;
+            height: 400px;
+        }
+        .chart-container canvas {
+            max-width: 100%;
+        }
+        .export-buttons {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        .export-btn {
+            padding: 8px 16px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .export-btn:hover {
+            background-color: #1976D2;
+        }
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+        .error {
+            padding: 15px;
+            background-color: #ffebee;
+            color: #c62828;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Поиск и анализ голосований</h1>
+        <div class="nav-links">
+            <a href="{% url 'polls:index' %}">Главная</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'polls:create' %}">Создать опрос</a>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="search-panel">
+            <h2>Поиск голосований</h2>
+            <form class="search-form" id="searchForm">
+                <div class="form-group">
+                    <label for="search_text">Поиск по тексту:</label>
+                    <input type="text" id="search_text" name="search" placeholder="Введите текст для поиска">
+                </div>
+                <div class="form-group">
+                    <label for="date_from">Дата от:</label>
+                    <input type="date" id="date_from" name="date_from">
+                </div>
+                <div class="form-group">
+                    <label for="date_to">Дата до:</label>
+                    <input type="date" id="date_to" name="date_to">
+                </div>
+                <div class="form-group">
+                    <label for="sort_by">Сортировать по:</label>
+                    <select id="sort_by" name="sort_by">
+                        <option value="date">Дате</option>
+                        <option value="popularity">Популярности</option>
+                        <option value="votes">Количеству голосов</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="order">Порядок:</label>
+                    <select id="order" name="order">
+                        <option value="desc">По убыванию</option>
+                        <option value="asc">По возрастанию</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn">Поиск</button>
+            </form>
+            
+            <ul class="poll-list" id="pollList">
+                <li class="loading">Введите критерии поиска и нажмите "Поиск"</li>
+            </ul>
+        </div>
+        
+        <div class="stats-panel">
+            <div id="statsPlaceholder" style="text-align: center; padding: 40px; color: #999;">
+                <p>Выберите голосование из списка для просмотра статистики</p>
+            </div>
+            <div class="stats-content" id="statsContent">
+                <div class="stats-header">
+                    <h2 id="statsQuestion"></h2>
+                </div>
+                <div id="statsData"></div>
+                <div class="chart-container" id="chartContainer"></div>
+                <div class="export-buttons">
+                    <a href="#" id="exportJson" class="export-btn" target="_blank">Экспорт JSON</a>
+                    <a href="#" id="exportCsv" class="export-btn" target="_blank">Экспорт CSV</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = '/api/analytics/';
+        
+        document.getElementById('searchForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const params = new URLSearchParams();
+            for (const [key, value] of formData.entries()) {
+                if (value) params.append(key, value);
+            }
+            
+            const pollList = document.getElementById('pollList');
+            pollList.innerHTML = '<li class="loading">Загрузка...</li>';
+            
+            try {
+                const response = await fetch(`${API_BASE}search/?${params}`);
+                const data = await response.json();
+                
+                if (data.results && data.results.length > 0) {
+                    pollList.innerHTML = data.results.map(poll => `
+                        <li class="poll-item" data-id="${poll.id}" onclick="loadStats(${poll.id})">
+                            <h3>${poll.question_text}</h3>
+                            <p>Дата: ${new Date(poll.pub_date).toLocaleDateString('ru-RU')}</p>
+                            <p>Всего голосов: ${poll.total_votes || 0}</p>
+                        </li>
+                    `).join('');
+                } else {
+                    pollList.innerHTML = '<li class="loading">Голосования не найдены</li>';
+                }
+            } catch (error) {
+                pollList.innerHTML = `<li class="error">Ошибка при загрузке данных: ${error.message}</li>`;
+            }
+        });
+        
+        async function loadStats(questionId) {
+            document.querySelectorAll('.poll-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            document.querySelector(`[data-id="${questionId}"]`).classList.add('selected');
+            
+            const placeholder = document.getElementById('statsPlaceholder');
+            const statsContent = document.getElementById('statsContent');
+            const statsData = document.getElementById('statsData');
+            const chartContainer = document.getElementById('chartContainer');
+            
+            placeholder.style.display = 'none';
+            statsContent.classList.add('active');
+            statsData.innerHTML = '<p class="loading">Загрузка статистики...</p>';
+            chartContainer.innerHTML = '';
+            
+            try {
+                const statsResponse = await fetch(`${API_BASE}statistics/${questionId}/`);
+                if (!statsResponse.ok) {
+                    throw new Error('Ошибка загрузки статистики');
+                }
+                const stats = await statsResponse.json();
+                
+                document.getElementById('statsQuestion').textContent = stats.question_text;
+                statsData.innerHTML = `
+                    <div class="stat-item">
+                        <strong>Всего голосов:</strong> ${stats.total_votes}
+                    </div>
+                    <div class="stat-item">
+                        <strong>Дата публикации:</strong> ${new Date(stats.pub_date).toLocaleDateString('ru-RU')}
+                    </div>
+                    <div class="stat-item">
+                        <strong>Результаты по вариантам:</strong>
+                        <ul style="margin-top: 10px; padding-left: 20px;">
+                            ${stats.choices.map(choice => `
+                                <li>${choice.choice_text}: ${choice.votes} голосов (${choice.percentage}%)</li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                `;
+                
+                document.getElementById('exportJson').href = `${API_BASE}export/${questionId}/json/`;
+                document.getElementById('exportCsv').href = `${API_BASE}export/${questionId}/csv/`;
+                
+                chartContainer.innerHTML = '<canvas id="pollChart"></canvas>';
+                const ctx = document.getElementById('pollChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: stats.choices.map(c => c.choice_text),
+                        datasets: [{
+                            label: 'Количество голосов',
+                            data: stats.choices.map(c => c.votes),
+                            backgroundColor: 'rgba(70, 130, 180, 0.8)',
+                            borderColor: 'rgba(70, 130, 180, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Результаты голосования',
+                                font: {
+                                    size: 16,
+                                    weight: 'bold'
+                                }
+                            },
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    stepSize: 1
+                                }
+                            },
+                            x: {
+                                ticks: {
+                                    maxRotation: 45,
+                                    minRotation: 45
+                                }
+                            }
+                        }
+                    }
+                });
+                
+            } catch (error) {
+                statsData.innerHTML = `<div class="error">Ошибка при загрузке статистики: ${error.message}</div>`;
+                chartContainer.innerHTML = '';
+            }
+        }
+        
+        window.addEventListener('DOMContentLoaded', () => {
+            fetch(`${API_BASE}search/`)
+                .then(response => response.json())
+                .then(data => {
+                    const pollList = document.getElementById('pollList');
+                    if (data.results && data.results.length > 0) {
+                        pollList.innerHTML = data.results.map(poll => `
+                            <li class="poll-item" data-id="${poll.id}" onclick="loadStats(${poll.id})">
+                                <h3>${poll.question_text}</h3>
+                                <p>Дата: ${new Date(poll.pub_date).toLocaleDateString('ru-RU')}</p>
+                                <p>Всего голосов: ${poll.total_votes || 0}</p>
+                            </li>
+                        `).join('');
+                    } else {
+                        pollList.innerHTML = '<li class="loading">Голосования не найдены</li>';
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('pollList').innerHTML = `<li class="error">Ошибка при загрузке данных: ${error.message}</li>`;
+                });
+        });
+    </script>
+</body>
+</html>
+
