@@ -9,7 +9,7 @@ COPY requirements.txt .
 
 RUN pip install --no-cache-dir git+https://github.com/kurtmckee/feedparser.git
 
-RUN pip install --no-cache-dir Flask==3.0.0 requests==2.31.0 gunicorn==21.2.0 pytest==7.4.3
+RUN pip install --no-cache-dir Flask==3.0.0 requests==2.31.0 gunicorn>=24.0.0 pytest==7.4.3
 
 COPY services/ ./services/
 
