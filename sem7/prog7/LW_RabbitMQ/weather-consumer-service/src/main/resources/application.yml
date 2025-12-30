@@ -1,0 +1,34 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: weather-consumer-service
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: admin
+    password: admin
+    listener:
+      simple:
+        acknowledge-mode: manual
+
+rabbitmq:
+  queue:
+    request: weather.request.queue
+    response: weather.response.queue
+    aggregated: weather.aggregated.queue
+  exchange:
+    weather: weather.exchange
+  routing-key:
+    request: weather.request
+    response: weather.response
+    aggregated: weather.aggregated
+
+# Конфигурация OpenWeatherMap API
+weather:
+  api:
+    key: 3690f63aa4b023af2ca8abff71e37411 # ВАЖНО: Замените на ваш ключ
+    url: https://api.openweathermap.org/data/2.5/weather
+    delay: 1000 # Задержка между запросами в мс
+
