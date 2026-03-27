@@ -225,4 +225,4 @@ stop
 ```
 
 
-![Activity](/Users/herman/Documents/GitHub/UniTasks/sem8/spec-lang/img/ZL4nJiD04EpzYYr9WsXeWWGjHNX491mH2Gp2fhSDIWeY8j8WKG053xX0J2mdDb-O_H6p5v8294HnkZdjpEpkN9nqBQwZNcgE14SnIeDEFj7nnmRFSC-spfiGprgP43bCqPFnqyTI9tkeGfMPUNA4fKdlR13faEzrrpOhc2fqJ4zQjxcLKgdSq.png)
+![Activity](img/ZL4nJiD04EpzYYr9WsXeWWGjHNX491mH2Gp2fhSDIWeY8j8WKG053xX0J2mdDb-O_H6p5v8294HnkZdjpEpkN9nqBQwZNcgE14SnIeDEFj7nnmRFSC-spfiGprgP43bCqPFnqyTI9tkeGfMPUNA4fKdlR13faEzrrpOhc2fqJ4zQjxcLKgdSq.png)
