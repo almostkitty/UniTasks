@@ -3,6 +3,8 @@
 
 # Выполнение:
 Диаграмма:
+
+
 ![Диаграмма](img/VLDDIyDG4BpdL-nH3wAKdfg3Twbwy2g8Oeg5M4iRGMzDgbQmMF7aHQhW3tZMniQF97zXtpzozgMfhLK99E5bTcPtTjBqTXkUPPMuhriSSQnxEj1TuX4hJd6KQ9yuPaMiT9k77Ed07gCJ7d0eLQP2dm7Rua_W0kA8yAx0yYaG-QZuZJzOsPPLhT02FqsZKt0DSGdRAxeO01s2rTUzrKNo3fmQAeQi5YsY4j-1TW2kK7T4D-2Gtm55Nux….png)
 
 

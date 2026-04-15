@@ -1,34 +1,68 @@
-## 1. Диаграмма вариантов использования (Use Case)
+# 0. Кратко о предметной области и подходе
+
+**Предметная область:** аудит происхождения профессиональных текстов (human vs LLM) с вероятностной интерпретацией результата и формированием отчета.
+
+**Подход:**
+- многоформатная загрузка документа;
+- извлечение/нормализация текста;
+- расчет набора статистических, стилометрических и LLM-ориентированных признаков;
+- агрегация признаков в итоговую вероятность;
+- хранение аудита, версионирование моделей и метрик;
+- интерфейсы для аналитика, администратора и интеграций.
+
+# 1. Диаграмма вариантов использования (Use Case)
 
 ```
 @startuml
 left to right direction
+skinparam packageStyle rectangle
+skinparam usecase {
+  BackgroundColor #F9FBFF
+  BorderColor #2F4F4F
+}
 
 actor "Пользователь" as User
 actor "Администратор" as Admin
 
-rectangle "Сервис аудита LLM" {
-
-  User --> (Загрузить текст)
-  User --> (Запустить анализ)
-  User --> (Просмотреть результат)
-  User --> (Просмотреть детальный отчёт)
-
-  Admin --> (Управление параметрами анализа)
-  Admin --> (Просмотр статистики)
-
-  (Запустить анализ) ..> (Предобработка текста) : <<include>>
-  (Запустить анализ) ..> (Вычисление метрик) : <<include>>
-  (Запустить анализ) ..> (Расчёт вероятности LLM) : <<include>>
-
-  (Просмотреть детальный отчёт) ..> (Просмотреть результат) : <<extend>>
+rectangle "LLM Audit Service" {
+  usecase "Зарегистрироваться" as UC_Register
+  usecase "Войти в систему" as UC_Login
+  usecase "Загрузить документ\n(PDF/DOCX/RTF/ODT/TXT)" as UC_Upload
+  usecase "Извлечь текст\nиз документа" as UC_Extract
+  usecase "Запустить аудит текста" as UC_Audit
+  usecase "Просмотреть метрики\nи вероятность LLM" as UC_ViewResult
+  usecase "Сформировать отчет\nпо результатам аудита" as UC_Report
+  usecase "Скачать отчет" as UC_Download
+  usecase "Управлять каталогом\nметрик и весов" as UC_Weights
+  usecase "Управлять пользователями\nи ролями" as UC_Users
+  usecase "Просмотреть историю\nаудитов" as UC_History
 }
 
+User --> UC_Register
+User --> UC_Login
+User --> UC_Upload
+User --> UC_Audit
+User --> UC_ViewResult
+User --> UC_Download
+User --> UC_History
+
+
+Admin --> UC_Login
+Admin --> UC_Weights
+Admin --> UC_Users
+Admin --> UC_History
+
+UC_Audit --> UC_Login : <<include>>
+UC_Audit --> UC_Extract : <<include>>
+UC_Audit --> UC_ViewResult : <<include>>
+UC_Audit --> UC_Report : <<include>>
+UC_Report --> UC_ViewResult : <<include>>
+UC_Report --> UC_Download : <<extend>>
 @enduml
 ```
 
 
-![Use Case](img/dPBDJi9G48NtVOe9Ard00nX2uXwNFW2X5PjWIKfDJ8m9FmiMaA1kNABn1GhQjF9JNc7k6tbc00F5H6K3fVVCD-SSRiEv32Xeak_MhmAoNT-f1MxJiwngBMZwbECnfpmtGuxnFUNGT3cItpcgjkYYvVZVmWV-u0KdlEJ4T4pNj5MSchPAp-nh5rJ1Lxrwmy70AqSGJKLEqFOmds0Y97d3g_szYXrHfNAUeplB8jrDXKAPJlWPn--c3K8….png)
+![Use Case](img/ZLHDQzj04BthLopkfJq4G-cb9HWIkw87bnJ7QNC8525jLH55CfBS99I2FmgvXBhqqjv2wHymTenLMxR_mku_winAAw_iWeEHRJtDlddpPaOk_H2Ho2U1Ot-CYEK4r8mStzF2SyTh6O5nGLg6UMxOz3YwTYd1nuPdkrG9Q8VKD49AFck474Am7VXjpwhwhX-GH_fp_L3NyOaVM3J8qAVwC_XeNpJDC2C0IkoEBTcStx8f_8xOaFVO1Ez….png)
 
 
 
@@ -36,164 +70,297 @@ rectangle "Сервис аудита LLM" {
 
 ```
 @startuml
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
 
-class User {
-  +id: int
-  +email: string
-  +password: string
+package "api" {
+  class AuthController {
+    +register(email, password): AuthResponse
+    +login(email, password): AuthResponse
+  }
+  class AuditController {
+    +auditDocument(file, metadata): AuditResponse
+    +auditText(text, metadata): AuditResponse
+  }
+  class ExtractController {
+    +extract(file): ExtractResponse
+  }
+  class ReportController {
+    +getReport(auditId): ReportDTO
+    +exportReport(auditId, format): Binary
+  }
 }
 
-class Document {
-  +id: int
-  +text: string
-  +upload_date: datetime
+package "application" {
+  class AuthService {
+    +register(input: RegisterInput): UserAccount
+    +login(input: LoginInput): AuthToken
+    +authorize(token: String, requiredRole: Role): bool
+  }
+  class AuditService {
+    +runAudit(input: AuditInput): AuditResult
+  }
+  class IngestionService {
+    +extractText(file): String
+  }
+  class AnalysisEngine {
+    +analyze(text: String): MetricSet
+  }
+  class ScoringService {
+    +computeProbability(metrics: MetricSet, modelVersion: String): float
+  }
+  class ReportingService {
+    +buildReport(audit: Audit, result: AuditResult): Report
+  }
 }
 
-class Metrics {
-  +lexical_diversity: float
-  +burstiness: float
-  +entropy: float
-  +avg_sentence_length: float
-  +repetition_score: float
+package "domain" {
+  class Audit {
+    +id: UUID
+    +createdAt: DateTime
+    +sourceType: SourceType
+    +status: AuditStatus
+    +requestedBy: UUID
+    +modelVersion: String
+  }
+  together {
+    class UserAccount {
+      +id: UUID
+      +email: String
+      +passwordHash: String
+      +role: Role
+      +isActive: bool
+      +createdAt: DateTime
+    }
+    enum Role {
+      USER
+      ADMIN
+    }
+  }
+
+  UserAccount "1" --> "1" Role : назначенная роль
+
+  class Document {
+    +id: UUID
+    +filename: String
+    +mimeType: String
+    +sha256: String
+    +rawStoragePath: String
+  }
+  class TextContent {
+    +id: UUID
+    +documentId: UUID
+    +language: String
+    +normalizedText: String
+    +charCount: int
+    +wordCount: int
+  }
+  class MetricSet {
+    +lexicalDiversity: float
+    +burstiness: float
+    +avgSentenceLength: float
+    +textEntropy: float
+    +stopWordRatio: float
+    +wordLengthVariation: float
+    +punctuationRatio: float
+    +repetitionScore: float
+    +perplexity: float
+  }
+  class AuditResult {
+    +id: UUID
+    +auditId: UUID
+    +llmProbability: float
+    +decision: DecisionType
+    +explanation: String
+  }
+  class Report {
+    +id: UUID
+    +auditId: UUID
+    +generatedAt: DateTime
+    +format: ReportFormat
+    +storagePath: String
+  }
+  class MetricWeightProfile {
+    +version: String
+    +weightsJson: String
+    +isActive: bool
+  }
 }
 
-class AuditResult {
-  +llm_probability: float
-  +label: string
+package "infrastructure" {
+  interface UserRepository {
+    +save(user: UserAccount): UserAccount
+    +findByEmail(email: String): UserAccount
+    +findById(id: UUID): UserAccount
+  }
+  interface DocumentRepository {
+    +save(document: Document): Document
+    +findById(id: UUID): Document
+  }
+  interface AuditRepository {
+    +save(audit: Audit): Audit
+    +findById(id: UUID): Audit
+  }
+  interface ResultRepository {
+    +save(result: AuditResult): AuditResult
+    +findByAuditId(auditId: UUID): AuditResult
+  }
+  interface StorageGateway {
+    +put(path: String, content: Binary): void
+    +get(path: String): Binary
+  }
+
+  package "Реализации (адаптеры)" as impl {
+    class SqlUserRepository
+    class SqlDocumentRepository
+    class SqlAuditRepository
+    class SqlResultRepository
+    class FileStorageGateway
+  }
+
+  SqlUserRepository ..|> UserRepository
+  SqlDocumentRepository ..|> DocumentRepository
+  SqlAuditRepository ..|> AuditRepository
+  SqlResultRepository ..|> ResultRepository
+  FileStorageGateway ..|> StorageGateway
 }
 
-class Analyzer {
-  +analyze(text): AuditResult
-}
+AuthController --> AuthService
+AuditController --> AuditService
+ExtractController --> IngestionService
+ReportController --> ReportingService
 
-class Preprocessor {
-  +clean(text): string
-}
+AuditController --> AuthService
+ReportController --> AuthService
+ExtractController --> AuthService
 
-class MetricCalculator {
-  +compute_metrics(text): Metrics
-}
+AuthService ..> UserRepository : порт\n(зависимость)
 
-class ScoringModel {
-  +predict(metrics): float
-}
+AuditService --> IngestionService
+AuditService --> AnalysisEngine
+AuditService --> ScoringService
+AuditService --> ReportingService
 
-User --> Document
-Document --> AuditResult
-AuditResult --> Metrics
+AnalysisEngine --> MetricSet
+ScoringService --> MetricSet
+ScoringService --> MetricWeightProfile
 
-Analyzer --> Preprocessor
-Analyzer --> MetricCalculator
-Analyzer --> ScoringModel
+AuditService ..> AuditRepository : порт\n(зависимость)
+AuditService ..> DocumentRepository : порт\n(зависимость)
+AuditService ..> ResultRepository : порт\n(зависимость)
+AuditService ..> UserRepository : порт\n(зависимость)
+ReportingService ..> StorageGateway : порт\n(зависимость)
 
+note right of SqlAuditRepository
+  Конкретные классы подключаются
+  к сервисам на этапе
+  сборки (DI-контейнер), на
+  схеме показаны реализации
+  интерфейсов портов.
+end note
+
+UserAccount "1" --> "0..*" Audit : requestedBy
+Audit "1" *-- "1" Document
+Audit "1" *-- "1" TextContent
+Audit "1" *-- "1" AuditResult
+AuditResult "1" *-- "1" MetricSet : снимок метрик
+Audit "1" o-- "0..*" Report
 @enduml
 ```
 
 
-![Class Diagram](img/PLBBRiCW4BpxApWcgl83FbIAsckagbNE2CCsNMaD29OqQTL_ByGld5oGcTsPtHciISKeZX62-6s4U4BJ2hHSFg5NIAs87D2U2k1pwxSBPiR-caRV-AzEfnuiFsWmNBYMI9wSCj8eXbQKax67HUS0kLF7GORWWbgHD7Y6496lhVZCx9jkbq9aj11Z1UO5WlDrcpgVPCmmM0sIm9xugwe6y7a-exCoQXTWAithx9D1VeUOQ7H6r4iVNAS….png)
-
-
-Код Python
-``` python
-class Metrics:
-    def __init__(self, lexical_diversity, burstiness, entropy, avg_sentence_length, repetition_score):
-        self.lexical_diversity = lexical_diversity
-        self.burstiness = burstiness
-        self.entropy = entropy
-        self.avg_sentence_length = avg_sentence_length
-        self.repetition_score = repetition_score
-
-
-class AuditResult:
-    def __init__(self, probability, label):
-        self.llm_probability = probability
-        self.label = label
-
-
-class Preprocessor:
-    def clean(self, text: str) -> str:
-        return text.lower().strip()
-
-
-class MetricCalculator:
-    def compute_metrics(self, text: str) -> Metrics:
-        # заглушка
-        return Metrics(0.5, 3.0, 5.0, 10.0, 0.2)
-
-
-class ScoringModel:
-    def predict(self, metrics: Metrics) -> float:
-        return 0.7
-
-
-class Analyzer:
-    def __init__(self):
-        self.preprocessor = Preprocessor()
-        self.calculator = MetricCalculator()
-        self.model = ScoringModel()
-
-    def analyze(self, text: str) -> AuditResult:
-        clean_text = self.preprocessor.clean(text)
-        metrics = self.calculator.compute_metrics(clean_text)
-        probability = self.model.predict(metrics)
-
-        label = "LLM" if probability > 0.5 else "Human"
-        return AuditResult(probability, label)
-```
+![Class Diagram](img/dLVDSjis4BxhAJ0-oQcjIJlJ7dJ8Z1CvhJf9cx6SvD8BJAuaJ2Y00K4dQkkPnDEVGzBctbCVGStKKzU9arSWtwYx04aH99LwSX15OXUxYzqF7nR98o5Zhlc21H5FaZrZj3XA3Om39IVYUs3NUqcb4Wa9PXa3KzhCLQyNy-0Hdm7Ruh7OOZ_qc3F2zb8plwMaqIgAG5i1Ovzec8d4WEx3WejeXyMe-aJfS7je9nn04YkPW5EEr4p8_zS….png)
 
 
 ## 3. Диаграмма последовательности (Sequence)
 
 ```
 @startuml
+autonumber
+actor "Пользователь" as User
+participant "Веб-интерфейс" as UI
+participant "Контроллер аутентификации" as AC
+participant "Контроллер аудита" as C
+participant "Сервис аутентификации" as AS
+participant "Сервис аудита" as S
+participant "Сервис извлечения текста" as I
+participant "Движок анализа метрик" as A
+participant "Сервис скоринга" as Sc
+database "Репозиторий аудитов\n(реализация порта)" as AR
+database "Репозиторий результатов\n(реализация порта)" as RR
+participant "Сервис отчётов" as R
 
-actor User
-participant "Frontend" as FE
-participant "API" as API
-participant "Analyzer" as Analyzer
-participant "Metrics" as Metrics
-participant "Model" as Model
+User -> UI: Вводит email и пароль
+UI -> AC: Запрос: вход в систему (HTTP POST /auth/login)
+AC -> AS: Войти в систему (логин и пароль)
+AS --> AC: Токен доступа (роль: обычный пользователь)
+AC --> UI: Ответ 200: токен сохранён в клиенте
 
-User -> FE : Загружает текст
-FE -> API : POST /audit
-API -> Analyzer : analyze(text)
+User -> UI: Выбирает файл и запускает проверку
+UI -> C: Запрос: аудит документа (HTTP POST /audit, токен, файл)
+C -> AS: Проверить токен и роль «пользователь»
+AS --> C: Доступ разрешён
+C -> S: Запустить аудит (документ и параметры)
 
-Analyzer -> Metrics : compute_metrics(text)
-Metrics --> Analyzer : metrics
+S -> AR: Сохранить аудит (статус: получен)
+AR --> S: Идентификатор аудита
 
-Analyzer -> Model : predict(metrics)
-Model --> Analyzer : probability
+S -> I: Извлечь текст из файла
+I --> S: Извлечённый текст
 
-Analyzer --> API : result
-API --> FE : JSON
-FE --> User : Отображение результата
+S -> A: Рассчитать набор метрик по тексту
+A --> S: Набор метрик
 
+S -> Sc: Рассчитать итоговую вероятность LLM
+Sc --> S: Вероятность использования LLM
+
+S -> RR: Сохранить результат аудита
+RR --> S: Идентификатор результата
+
+S -> AR: Обновить статус аудита (завершён)
+S -> R: Сформировать отчёт по результату
+R --> S: Ссылка или дескриптор отчёта
+
+S --> C: Ответ: метрики, вероятность, решение, отчёт
+C --> UI: Ответ 200: данные для экрана
+UI --> User: Показать метрики и вероятность
 @enduml
 ```
 
 
-![Sequence](img/NP2nJiCm48PtFyMfKnagTWOa1Yg11ArKc97hUB2Knf5paIXJ2Iix6yzGX58G29xX_4QS7RSY6QASx__qwxzVAhGERYljH2aT6cLAMI2CfiuMg8ji1BA2wNbVF9jVn3t_1q8Xy_M3TfsQ7dtaIgCpgef4cWU0pNJUoM4I8eI3oIcdW1EW5zhIkz_u9zhnrFe6V4CjVVb7tmX66EHOJCvdYniubdLcK8HD458YLcKtZb7Vuv4G1uMfb8e….png)
+![Sequence](img/bLLDInjH5DtFhtXqbK14wT958RXfm5APqLqtOvGse55qt1jJQo5fHH5Q2lMZssuciTECYPc0l-2zVzHpxtlpaKcY5XSncNllEUVUS--u1zvE_M1xVNFFSglUpfvu8Qza90UgBNlux4fV7Sc0lhyGxhvOsqVWhhldrQgrNRVk8VmSZpjpCfH3YbI7wYD-k5CD7L_9HVz0KGIgGmB17n84C9gCGXL2v8UoZzy-uJFaAkMbPrQHVv1_97t….png)
 
 
 ## 4. Диаграмма состояний (State)
 
 ```
 @startuml
+[*] --> RECEIVED
 
-[*] --> Загружен
+RECEIVED --> VALIDATING : validateInput()
+VALIDATING --> REJECTED : invalidFormat / invalidContent
+VALIDATING --> EXTRACTING : valid
 
-Загружен --> Обрабатывается
-Обрабатывается --> РассчитаныМетрики
-РассчитаныМетрики --> РассчитанаВероятность
-РассчитанаВероятность --> ГотовРезультат
+EXTRACTING --> FAILED : extractionError
+EXTRACTING --> ANALYZING : textReady
 
-ГотовРезультат --> [*]
+ANALYZING --> FAILED : analysisError
+ANALYZING --> SCORING : metricsReady
 
+SCORING --> FAILED : scoringError
+SCORING --> REPORTING : scoreReady
+
+REPORTING --> COMPLETED : reportReady
+REPORTING --> COMPLETED : reportSkipped
+
+FAILED --> [*]
+REJECTED --> [*]
+COMPLETED --> [*]
 @enduml
 ```
 
 
-![State](img/ZP112i8m44NtSugk2xs25oczIn8NBYmKwiADI8_GAjMYf6Vu_qP-cvrWbI7CPFxxGoPbNcL5iSbmH8yh7RUuOKGq--max8o1JiA0de5xN5IFgZmRMnEJkvFW5JjC31AZeDE2E4nuOBBVo9T9EgqmXvcDEb7PorJR_sYQVD0rODRZEwrzr_fFrcyZWpvbHLtiPLxP2m00.png)
+![State](img/XP71Zi8W48RlF0L7ryHuzx09GJIOhZNO65tZWLHYo2eqqzcDlhrjeTlMYpVu-UPZ68xZ4vrCFgaINCYTc1FIhffunn8vPvbSB-cC_kchFMiqqXM_EFeWlSEWM0cULOKpQbt3BZpSDD9fk-VUeN7uMYZscMAyVmaXlQn65amcZTdS4NIErZi1uE6LOskM7Bw32IjM6Nr-4DB50vbs-leeRHbKGsZBKnKyDuDWypAgsdmWAdCFrbs2fqy….png)
 
 
 ## 5. Диаграмма деятельности (Activity)
@@ -202,27 +369,149 @@ FE --> User : Отображение результата
 @startuml
 start
 
-:Загрузка текста пользователем;
+:Принять запрос на аудит;
+:Проверить формат и размер файла;
 
-:Предобработка текста;
-
-:Вычисление метрик;
-
-:Расчёт вероятности LLM;
-
-if (Вероятность > 0.5?) then (да)
-  :Классификация как LLM;
+if (Формат поддерживается?) then (да)
+  :Извлечь текст;
 else (нет)
-  :Классификация как Human;
+  :Вернуть ошибку 400/422;
+  stop
 endif
 
-:Формирование отчёта;
+:Нормализовать текст;
+:Рассчитать статистические метрики;
+:Рассчитать стилометрические метрики;
 
-:Отображение результата пользователю;
+if (LLM-метрики доступны?) then (да)
+  :Рассчитать perplexity / иные LLM-признаки;
+else (нет)
+  :Пропустить LLM-метрики;\nПометить как null;
+endif
+
+:Агрегировать метрики в llm_probability;
+:Сформировать интерпретацию результата;
+:Сохранить аудит и метрики;
+:Сформировать отчет;
+:Вернуть JSON-ответ;
 
 stop
 @enduml
 ```
 
 
-![Activity](img/ZL4nJiD04EpzYYr9WsXeWWGjHNX491mH2Gp2fhSDIWeY8j8WKG053xX0J2mdDb-O_H6p5v8294HnkZdjpEpkN9nqBQwZNcgE14SnIeDEFj7nnmRFSC-spfiGprgP43bCqPFnqyTI9tkeGfMPUNA4fKdlR13faEzrrpOhc2fqJ4zQjxcLKgdSq.png)
+![Activity](img/VLDDIyDG4BpdL-nH3wAKdfg3Twbwy2g8Oeg5M4iRGMzDgbQmMF7aHQhW3tZMniQF97zXtpzozgMfhLK99E5bTcPtTjBqTXkUPPMuhriSSQnxEj1TuX4hJd6KQ9yuPaMiT9k77Ed07gCJ7d0eLQP2dm7Rua_W0kA8yAx0yYaG-QZuZJzOsPPLhT02FqsZKt0DSGdRAxeO01s2rTUzrKNo3fmQ.png)
+
+## 6. Сгенерированный код по диаграмме классов
+
+```python
+from dataclasses import dataclass
+from datetime import datetime
+from enum import Enum
+from typing import Optional
+from uuid import UUID
+
+
+class SourceType(str, Enum):
+    FILE = "file"
+    API = "api"
+
+
+class AuditStatus(str, Enum):
+    RECEIVED = "RECEIVED"
+    VALIDATING = "VALIDATING"
+    EXTRACTING = "EXTRACTING"
+    ANALYZING = "ANALYZING"
+    SCORING = "SCORING"
+    REPORTING = "REPORTING"
+    COMPLETED = "COMPLETED"
+    FAILED = "FAILED"
+    REJECTED = "REJECTED"
+
+
+class DecisionType(str, Enum):
+    LOW = "LOW"
+    MEDIUM = "MEDIUM"
+    HIGH = "HIGH"
+
+
+@dataclass
+class Document:
+    id: UUID
+    filename: str
+    mime_type: str
+    sha256: str
+    raw_storage_path: str
+
+
+@dataclass
+class TextContent:
+    id: UUID
+    document_id: UUID
+    language: str
+    normalized_text: str
+    char_count: int
+    word_count: int
+
+
+@dataclass
+class MetricSet:
+    lexical_diversity: float
+    burstiness: float
+    avg_sentence_length: float
+    text_entropy: float
+    stop_word_ratio: float
+    word_length_variation: float
+    punctuation_ratio: float
+    repetition_score: float
+    perplexity: Optional[float] = None
+
+
+@dataclass
+class Audit:
+    id: UUID
+    created_at: datetime
+    source_type: SourceType
+    status: AuditStatus
+    requested_by: str
+    model_version: str
+
+
+@dataclass
+class AuditResult:
+    id: UUID
+    audit_id: UUID
+    llm_probability: float
+    decision: DecisionType
+    explanation: str
+    metrics: MetricSet
+
+
+class IngestionService:
+    def extract_text(self, file_bytes: bytes, filename: str) -> str:
+        raise NotImplementedError
+
+
+class AnalysisEngine:
+    def analyze(self, text: str) -> MetricSet:
+        raise NotImplementedError
+
+
+class ScoringService:
+    def compute_probability(self, metrics: MetricSet, model_version: str) -> float:
+        raise NotImplementedError
+
+
+class AuditService:
+    def __init__(self, ingestion: IngestionService, analysis: AnalysisEngine, scoring: ScoringService):
+        self.ingestion = ingestion
+        self.analysis = analysis
+        self.scoring = scoring
+
+    def run_audit(self, file_bytes: bytes, filename: str, model_version: str) -> AuditResult:
+        text = self.ingestion.extract_text(file_bytes, filename)
+        metrics = self.analysis.analyze(text)
+        probability = self.scoring.compute_probability(metrics, model_version)
+        # mapping probability -> decision/explanation omitted
+        raise NotImplementedError
+```
