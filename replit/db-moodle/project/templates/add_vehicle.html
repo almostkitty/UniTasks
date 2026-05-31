@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавление автомобиля</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        input[type="text"],
+        input[type="number"],
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .vehicles-btn {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .vehicles-btn a {
+            text-decoration: none;
+            color: #007bff;
+            border: 1px solid #007bff;
+            padding: 10px 20px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+        .vehicles-btn a:hover {
+            background-color: #0056b3;
+            color: #fff;
+        }
+        footer {
+            padding: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #777; 
+            margin-top: auto; 
+        }
+    </style>
+</head>
+<body>
+    <h1>Добавление автомобиля</h1>
+    <form id="vehicleForm">
+        <label for="number">Номер:</label>
+        <input type="text" id="number" name="number" required>
+        
+        <label for="model">Модель:</label>
+        <input type="text" id="model" name="model" required>
+        
+        <label for="manufactureYear">Год выпуска:</label>
+        <input type="number" id="manufactureYear" name="manufacture_year" required>
+        
+        <label for="startYear">Год начала эксплуатации:</label>
+        <input type="number" id="startYear" name="start_year" required>
+        
+        <button type="button" onclick="submitForm()">Добавить автомобиль</button>
+    </form>
+
+    <div class="vehicles-btn">
+        <a href="/vehicles">К списку автомобилей</a>
+    </div>
+
+    <script>
+        function submitForm() {
+            const formData = {
+                number: document.getElementById('number').value,
+                model: document.getElementById('model').value,
+                manufacture_year: document.getElementById('manufactureYear').value,
+                start_year: document.getElementById('startYear').value,
+            };
+
+            fetch('/vehicles', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Успешно сохранено');
+                document.getElementById('vehicleForm').reset();
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Ошибка при добавлении автомобиля');
+            });
+        }
+    </script>
+    <footer>
+        Разработано командой Vедышки<br>
+        Санкт-Петербург<br>
+        2024
+    </footer>
+</body>
+</html>

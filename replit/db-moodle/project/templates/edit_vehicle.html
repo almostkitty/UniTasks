@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование автомобиля</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+            color: #333;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 300px;
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ddd; 
+            border-radius: 8px; 
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+        }
+        label {
+            margin-bottom: 5px;
+            color: #555; 
+        }
+        input[type="text"],
+        input[type="number"],
+        input[type="date"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd; 
+            border-radius: 4px; 
+        }
+        input[type="submit"] {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: 1px solid #007bff; 
+            background-color: #007bff; 
+            color: #fff; 
+            cursor: pointer;
+            align-self: center;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3; 
+        }
+        footer {
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+            color: #777; 
+            background-color: #f2f2f2; 
+            margin-top: auto; 
+        }
+    </style>
+</head>
+<body>
+    <h1>Редактирование автомобиля</h1>
+    <form method="POST" action="{{ url_for('update_vehicle', vehicle_id=vehicle.id) }}">
+        <label for="number">Номер:</label>
+        <input type="text" id="number" name="number" value="{{ vehicle.number }}">
+        
+        <label for="model">Модель:</label>
+        <input type="text" id="model" name="model" value="{{ vehicle.model }}">
+        
+        <label for="manufactureYear">Год выпуска:</label>
+        <input type="number" id="manufactureYear" name="manufacture_year" value="{{ vehicle.manufacture_year }}">
+        
+        <label for="startYear">Год начала эксплуатации:</label>
+        <input type="number" id="startYear" name="start_year" value="{{ vehicle.start_year }}">
+        
+        <input type="submit" value="Сохранить изменения">
+    </form>
+    <footer>
+        Разработано командой Vедышки<br>
+        Санкт-Петербург<br>
+        2024
+    </footer>
+</body>
+</html>

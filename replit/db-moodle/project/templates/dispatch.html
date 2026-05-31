@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Учет выездов</title>
+    <meta http-equiv="cache-control" content="no-cache">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        h1 {
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        a {
+            text-decoration: none;
+            color: #007bff;
+            margin-right: 10px; 
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .delete-btn {
+            color: #dc3545; 
+        }
+        .delete-btn:hover {
+            text-decoration: underline;
+        }
+        .add-btn {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .add-btn form {
+            display: inline-block;
+        }
+        .add-btn input[type="submit"] {
+            width: auto; 
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #28a745; 
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .add-btn input[type="submit"]:hover {
+            background-color: #218838; 
+        }
+        footer {
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+            color: #777; 
+            background-color: #f2f2f2; 
+            margin-top: auto; /* Push footer to the bottom */
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .home-btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .home-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .download-btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #17a2b8; 
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .download-btn:hover {
+            background-color: #138496; 
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Учет выездов</h1>
+        <div class="btn-container">
+            <a href="/" class="home-btn">На главную</a>
+            <div class="add-btn">
+                <form method="GET" action="{{ url_for('add_dispatch_page') }}">
+                    <input type="submit" value="Добавить выезд">
+                </form>
+            </div>
+        </div>
+    </header>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Номер</th>
+                <th>Продолжительность (в минутах)</th>
+                <th>ID сотрудника</th>
+                <th>Кол-во спасенных</th>
+                <th>Кол-во эвакуированных</th>
+                <th>Дата работы</th>
+                <th>Тип работы</th>
+                <th>Адрес места работы</th>
+                <th>Ранг пожара</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for dispatch in dispatches %}
+            <tr>
+                <td>{{ dispatch.id }}</td>
+                <td>{{ dispatch.number }}</td>
+                <td>{{ dispatch.duration }}</td>
+                <td>{{ dispatch.lead_employee_id }}</td>
+                <td>{{ dispatch.rescued_count }}</td>
+                <td>{{ dispatch.evacuated_count }}</td>
+                <td>{{ dispatch.work_date }}</td>
+                <td>{{ dispatch.work_type }}</td>
+                <td>{{ dispatch.work_address }}</td>
+                <td>{{ dispatch.fire_rank }}</td>
+                <td>
+                    <a href="{{ url_for('edit_dispatch_form', dispatch_id=dispatch.id) }}">Редактировать</a>
+                    <a class="delete-btn" href="{{ url_for('delete_dispatch', dispatch_id=dispatch.id) }}">Удалить</a>
+                    </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+    </table>
+
+    <footer>
+        Разработано командой Vедышки<br>
+        Санкт-Петербург<br>
+        2024
+    </footer>
+</body>
+</html>

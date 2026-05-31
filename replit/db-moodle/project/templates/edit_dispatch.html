@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование выезда</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9; 
+        }
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+            color: #333; 
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 300px;
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ddd; 
+            border-radius: 8px; 
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+        }
+        label {
+            margin-bottom: 5px;
+            color: #555; 
+        }
+        input[type="text"], input[type="number"], input[type="date"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd; 
+            border-radius: 4px; 
+        }
+        input[type="submit"] {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: 1px solid #007bff; 
+            background-color: #007bff; 
+            color: #fff; 
+            cursor: pointer;
+            align-self: center;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3; 
+        }
+        footer {
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+            color: #777; 
+            background-color: #f2f2f2; 
+            margin-top: auto; 
+        }
+    </style>
+</head>
+<body>
+    <h1>Редактирование выезда</h1>
+    <form method="POST" action="{{ url_for('update_dispatch', dispatch_id=dispatch.id) }}">
+        <label for="number">Номер:</label>
+        <input type="text" id="number" name="number" value="{{ dispatch.number }}">
+
+        <label for="duration">Продолжительность (в минутах):</label>
+        <input type="number" id="duration" name="duration" value="{{ dispatch.duration }}">
+
+        <label for="lead_employee_id">ID сотрудника:</label>
+        <input type="number" id="lead_employee_id" name="lead_employee_id" value="{{ dispatch.lead_employee_id }}">
+
+        <label for="rescued_count">Кол-во спасенных:</label>
+        <input type="number" id="rescued_count" name="rescued_count" value="{{ dispatch.rescued_count }}">
+
+        <label for="evacuated_count">Кол-во эвакуированных:</label>
+        <input type="number" id="evacuated_count" name="evacuated_count" value="{{ dispatch.evacuated_count }}">
+
+        <label for="work_date">Дата работы:</label>
+        <input type="date" id="work_date" name="work_date" value="{{ dispatch.work_date }}">
+
+        <label for="work_type">Тип работы:</label>
+        <input type="text" id="work_type" name="work_type" value="{{ dispatch.work_type }}">
+
+        <label for="work_address">Адрес места работы:</label>
+        <input type="text" id="work_address" name="work_address" value="{{ dispatch.work_address }}">
+
+        <label for="fire_rank">Ранг пожара:</label>
+        <input type="number" id="fire_rank" name="fire_rank" value="{{ dispatch.fire_rank }}">
+
+        <input type="submit" value="Сохранить изменения">
+    </form>
+    <footer>
+        Разработано командой Vедышки<br>
+        Санкт-Петербург<br>
+        2024
+    </footer>
+</body>
+</html>

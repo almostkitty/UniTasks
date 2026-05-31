@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Система электронного документооборота</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9; 
+            position: relative;
+        }
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+            color: #333; 
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 10px; 
+            border: 1px solid #007bff; 
+            background-color: #007bff; 
+            color: #fff; 
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3; 
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+            border: 1px solid #ddd; 
+            border-radius: 8px; 
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        footer {
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+            color: #777; 
+            width: 100%;
+            position: absolute;
+            bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Добро пожаловать в Систему Электронного Документооборота МЧС! :D</h1>
+    <img src="/static/img/1.jpg" alt="А что миньоны делали в 39-ом?...">
+    <div class="button-container">
+        <a href="/employees"><button>Список сотрудников</button></a>
+        <a href="/certifications/list"><button>Список аттестаций</button></a>
+        <a href="/vehicles"><button>Учёт автомобильной техники</button></a>
+        <a href="/dispatches"><button>Учёт выездов</button></a>
+        <form action="/logout" method="post">
+        </form>
+    </div>
+    <footer>
+        Разработано командой Vедышки<br>
+        Санкт-Петербург<br>
+        2024
+    </footer>
+</body>
+</html>

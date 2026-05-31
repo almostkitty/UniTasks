@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Employee</title>
+</head>
+<body>
+    <h1>Delete Employee</h1>
+    <form id="deleteForm">
+        <label for="employeeId">Employee ID:</label><br>
+        <input type="number" id="employeeId" name="employee_id" required><br>
+        <button type="button" onclick="deleteEmployee()">Delete Employee</button>
+    </form>
+
+    <script>
+        function deleteEmployee() {
+            const employeeId = document.getElementById('employeeId').value;
+
+            fetch(`/employees/${employeeId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                document.getElementById('deleteForm').reset();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error deleting employee');
+            });
+        }
+    </script>
+</body>
+</html>

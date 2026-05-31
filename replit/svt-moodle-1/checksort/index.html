@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Array Sorter</title>
+</head>
+<body>
+    <h4>1140095</h4>
+    <script>
+        // Получаем URL-строку
+        const url = window.location.href;
+
+        // Ищем массив после знака вопроса
+        const arrayString = url.split('?')[1];
+
+        // Парсим строку в массив
+        const array = JSON.parse(arrayString);
+
+        // Сортируем массив чисел
+        array.sort((a, b) => a - b);
+
+        // Устанавливаем результат в заголовок окна
+        document.title = array.toString();
+    </script>
+</body>
+</html>

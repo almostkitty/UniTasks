@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добавить сотрудника</title>
+    <meta http-equiv="cache-control" content="no-cache">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .employees-btn {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .employees-btn a {
+            text-decoration: none;
+            color: #007bff;
+            border: 1px solid #007bff;
+            padding: 10px 20px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+        .employees-btn a:hover {
+            background-color: #0056b3;
+            color: #fff;
+        }
+        footer {
+            padding: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #777; 
+            margin-top: auto; 
+        }
+    </style>
+</head>
+<body>
+    <h1>Добавление сотрудника</h1>
+    <form id="employeeForm">
+        <label for="surname">Фамилия:</label>
+        <input type="text" id="surname" name="last_name" required>
+        
+        <label for="firstName">Имя:</label>
+        <input type="text" id="firstName" name="first_name" required>
+        
+        <label for="patronymic">Отчество:</label>
+        <input type="text" id="patronymic" name="middle_name">
+        
+        <label for="birthDate">Дата рождения:</label>
+        <input type="date" id="birthDate" name="birthday" required>
+        
+        <label for="positionId">Позиция:</label>
+        <input type="number" id="positionId" name="position" required>
+        
+        <label for="rankId">Ранг:</label>
+        <input type="number" id="rankId" name="rank">
+        
+        <button type="button" onclick="submitForm()">Добавить сотрудника</button>
+    </form>
+
+    <div class="employees-btn">
+        <a href="/employees">К сотрудникам</a>
+    </div>
+
+    <script>
+        function submitForm() {
+            const formData = {
+                last_name: document.getElementById('surname').value,
+                first_name: document.getElementById('firstName').value,
+                middle_name: document.getElementById('patronymic').value,
+                birthday: document.getElementById('birthDate').value,
+                position: document.getElementById('positionId').value,
+                rank: document.getElementById('rankId').value,
+            };
+
+            fetch('/employees', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Успешно сохранено');
+                document.getElementById('employeeForm').reset();
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Ошибка при добавлении сотрудника');
+            });
+        }
+    </script>
+    <footer>
+        Разработано командой Vедышки<br>
+        Санкт-Петербург<br>
+        2024
+    </footer>
+</body>
+</html>

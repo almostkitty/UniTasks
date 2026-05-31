@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <title>Страница HTML5</title>
+  <meta charset="utf-8">
+  <script>
+    function createDivs() {
+      var article = document.createElement('article');
+      for (var i = 0; i < 1000; i++) {
+        var div = document.createElement('div');
+        div.id = 'i' + i;
+        article.appendChild(div);
+      }
+      document.body.insertBefore(article, document.body.firstChild);
+    }
+  </script>
+ </head>
+ <body>
+  <h4>1140095</h4>
+  <button id="bt" onclick="createDivs()">Выполнить задание</button>
+ </body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добавить выезд</title>
+    <meta http-equiv="cache-control" content="no-cache">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .dispatches-btn {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .dispatches-btn a {
+            text-decoration: none;
+            color: #007bff;
+            border: 1px solid #007bff;
+            padding: 10px 20px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+        .dispatches-btn a:hover {
+            background-color: #0056b3;
+            color: #fff;
+        }
+        footer {
+            padding: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #777; 
+            margin-top: auto; 
+        }
+    </style>
+</head>
+<body>
+    <h1>Добавить выезд</h1>
+    <form id="dispatchForm">
+        <label for="number">Номер:</label>
+        <input type="text" id="number" name="number" required>
+
+        <label for="duration">Продолжительность (в минутах):</label>
+        <input type="number" id="duration" name="duration" required>
+
+        <label for="leadEmployeeId">ID сотрудника:</label>
+        <input type="number" id="leadEmployeeId" name="lead_employee_id" required>
+
+        <label for="rescuedCount">Кол-во спасенных:</label>
+        <input type="number" id="rescuedCount" name="rescued_count" required>
+
+        <label for="evacuatedCount">Кол-во эвакуированных:</label>
+        <input type="number" id="evacuatedCount" name="evacuated_count" required>
+
+        <label for="workDate">Дата работы:</label>
+        <input type="date" id="workDate" name="work_date" required>
+
+        <label for="workType">Тип работы:</label>
+        <input type="text" id="workType" name="work_type" required>
+
+        <label for="workAddress">Адрес места работы:</label>
+        <input type="text" id="workAddress" name="work_address" required>
+
+        <label for="fireRank">Ранг пожара:</label>
+        <input type="number" id="fireRank" name="fire_rank" required>
+
+        <button type="button" onclick="submitForm()">Добавить выезд</button>
+    </form>
+
+    <div class="dispatches-btn">
+        <a href="/dispatches">К выездам</a>
+    </div>
+
+    <script>
+        function submitForm() {
+            const formData = {
+                number: document.getElementById('number').value,
+                duration: document.getElementById('duration').value,
+                lead_employee_id: document.getElementById('leadEmployeeId').value,
+                rescued_count: document.getElementById('rescuedCount').value,
+                evacuated_count: document.getElementById('evacuatedCount').value,
+                work_date: document.getElementById('workDate').value,
+                work_type: document.getElementById('workType').value,
+                work_address: document.getElementById('workAddress').value,
+                fire_rank: document.getElementById('fireRank').value
+            };
+
+            fetch('/dispatches', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Успешно сохранено');
+                document.getElementById('dispatchForm').reset();
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Ошибка при добавлении выезда');
+            });
+        }
+    </script>
+    <footer>
+        Разработано командой Vедышки<br>
+        Санкт-Петербург<br>
+        2024
+    </footer>
+</body>
+</html>

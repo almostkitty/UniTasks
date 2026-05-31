@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добавить аттестацию</title>
+    <meta http-equiv="cache-control" content="no-cache">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .certification-btn {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .certification-btn a {
+            text-decoration: none;
+            color: #007bff;
+            border: 1px solid #007bff;
+            padding: 10px 20px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+        .certification-btn a:hover {
+            background-color: #0056b3;
+            color: #fff;
+        }
+        footer {
+            padding: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #777; 
+            margin-top: auto; 
+        }
+    </style>
+</head>
+<body>
+    <h1>Добавить аттестацию</h1>
+    <form id="certificationForm">
+        <label for="employeeId">ID сотрудника:</label>
+        <input type="number" id="employeeId" name="employee_id" required>
+        
+        <label for="certificationType">Тип аттестации:</label>
+        <input type="number" id="certificationType" name="type" required>
+        
+        <label for="status">Статус:</label>
+        <input type="checkbox" id="status" name="status">
+        
+        <label for="noAttestationReason">Причина отсутствия аттестации:</label>
+        <input type="text" id="noAttestationReason" name="no_attestation_reason">
+        
+        <label for="date">Дата:</label>
+        <input type="date" id="date" name="date" required>
+        
+        <button type="button" onclick="submitForm()">Добавить аттестацию</button>
+    </form>
+
+    <div class="certification-btn">
+        <a href="/certifications/list">К аттестациям</a>
+    </div>
+
+    <script>
+        function submitForm() {
+            const formData = {
+                employee_id: document.getElementById('employeeId').value,
+                type: document.getElementById('certificationType').value,
+                status: document.getElementById('status').checked,
+                no_attestation_reason: document.getElementById('noAttestationReason').value,
+                date: document.getElementById('date').value,
+            };
+
+            fetch('/certifications', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Успешно сохранено');
+                document.getElementById('certificationForm').reset();
+            })
+                .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Ошибка при добавлении аттестации');
+            });
+        }
+    </script>
+    <footer>
+        Разработано командой Vедышки<br>
+        Санкт-Петербург<br>
+        2024
+    </footer>
+</body>
+</html>

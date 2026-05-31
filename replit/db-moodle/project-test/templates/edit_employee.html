@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование сотрудника</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9; 
+        }
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+            color: #333; 
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 300px;
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ddd; 
+            border-radius: 8px; 
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+        }
+        label {
+            margin-bottom: 5px;
+            color: #555; 
+        }
+        input[type="text"], input[type="date"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd; 
+            border-radius: 4px; 
+        }
+        input[type="submit"] {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: 1px solid #007bff; 
+            background-color: #007bff; 
+            color: #fff; 
+            cursor: pointer;
+            align-self: center;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3; 
+        }
+        footer {
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+            color: #777; 
+            background-color: #f2f2f2; 
+            margin-top: auto; 
+        }
+    </style>
+</head>
+<body>
+    <h1>Редактирование сотрудника</h1>
+    <form method="POST" action="{{ url_for('update_employee', employee_id=employee.id) }}">
+        <label for="last_name">Фамилия:</label>
+        <input type="text" id="last_name" name="last_name" value="{{ employee.last_name }}">
+        
+        <label for="first_name">Имя:</label>
+        <input type="text" id="first_name" name="first_name" value="{{ employee.first_name }}">
+        
+        <label for="middle_name">Отчество:</label>
+        <input type="text" id="middle_name" name="middle_name" value="{{ employee.middle_name }}">
+        
+        <label for="birthday">Дата рождения:</label>
+        <input type="date" id="birthday" name="birthday" value="{{ employee.birthday }}">
+        
+        <label for="position">Должность:</label>
+        <input type="text" id="position" name="position" value="{{ employee.position }}">
+        
+        <label for="rank">Звание:</label>
+        <input type="text" id="rank" name="rank" value="{{ employee.rank }}">
+        
+        <input type="submit" value="Сохранить изменения">
+    </form>
+    <footer>
+        Разработано командой Vедышки<br>
+        Санкт-Петербург<br>
+        2024
+    </footer>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prime Numbers</title>
+</head>
+<body>
+    <h4>1140095</h4>
+    <script>
+        // Функция для проверки, является ли число простым
+        function isPrime(num) {
+            if (num < 2) return false;
+            for (let i = 2; i <= Math.sqrt(num); i++) {
+                if (num % i === 0) return false;
+            }
+            return true;
+        }
+
+        // Функция для вычисления количества простых чисел в диапазоне [2, N]
+        function countPrimes(N) {
+            let count = 0;
+            for (let i = 2; i <= N; i++) {
+                if (isPrime(i)) count++;
+            }
+            return count;
+        }
+
+        // Получаем URL-строку
+        const url = window.location.href;
+
+        // Ищем число после знака вопроса
+        const N = parseInt(url.split('?')[1]);
+
+        // Вычисляем количество простых чисел в диапазоне [2, N]
+        const primeCount = countPrimes(N);
+
+        // Устанавливаем результат в заголовок окна
+        document.title = primeCount.toString();
+    </script>
+</body>
+</html>
