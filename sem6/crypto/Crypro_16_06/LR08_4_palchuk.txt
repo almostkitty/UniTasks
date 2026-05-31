@@ -1,0 +1,44 @@
+> ;
+> p := nextprime(540); q := nextprime(737); n := p*q; phi_n := (p-1)*(q-1);
+                            p := 541
+                            q := 739
+                          n := 399799
+                        phi_n := 398520
+;
+> e1 := nextprime(7516); gcd(phi_n, e1);
+                           e1 := 7517
+                               1
+;
+> e2 := nextprime(4396); gcd(phi_n, e2);
+                           e2 := 4397
+                               1
+;
+> gcd(e1, e2); m := `mod`(432453, n);
+                               1
+                           m := 32654
+;
+> c1 := `mod`(`&^`(m, e1), n); c2 := `mod`(`&^`(m, e2), n);
+                          c1 := 133934
+                          c2 := 197772
+;
+> x := 'x'; y := 'y'; _Z1 := 1; sol := isolve(e1*x+e2*y = 1); assign(sol); x := x; y := y;
+                           x := 5337
+                           y := -9124
+;
+> e1*x+e2*y = 1;
+                             1 = 1
+;
+> d1 := `mod`(`&^`(c1, x), n); d2 := `mod`(`&^`(c2, abs(y)), n); dn2 := 'dn2'; t := msolve(d2*dn2 = 1, n); assign(t); dn2; m2 := `mod`(dn2*d1, n);
+                          d1 := 308057
+                          d2 := 249642
+                             364744
+                          m2 := 32654
+;
+> 
+;
+> m2-m;
+                               0
+;
+> 
+;
+

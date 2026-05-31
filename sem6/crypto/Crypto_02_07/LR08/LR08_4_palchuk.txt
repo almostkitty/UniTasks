@@ -1,0 +1,49 @@
+> NULL;
+> with(numtheory);
+> with(RandomTools);
+> p := nextprime(Generate(integer(range = 2 .. 10^5)));
+                           p := 80963
+;
+> q := nextprime(Generate(integer(range = 2 .. 10^5)));
+                           q := 29123
+;
+> n := p*q;
+                        n := 2357885449
+;
+> phi_n := (p-1)*(q-1);
+                      phi_n := 2357775364
+;
+> e1 := nextprime(Generate(integer(range = 2 .. 10^5))); while igcd(e1, phi_n) <> 1 do e1 := nextprime(Generate(integer(range = 2 .. 10^5))) end do; e1;
+                             31957
+;
+> e2 := nextprime(Generate(integer(range = 2 .. 10^5))); while igcd(e2, phi_n) <> 1 do e2 := nextprime(Generate(integer(range = 2 .. 10^5))) end do; e2;
+                             19001
+;
+> m := `mod`(Generate(integer(range = 2 .. 10^5)), n);
+                           m := 59706
+;
+> c1 := `mod`(`&^`(m, e1), n); c2 := `mod`(`&^`(m, e2), n);
+                        c1 := 520370504
+                        c2 := 1408501575
+;
+> x := 'x'; y := 'y'; _Z1 := 1; sol := isolve(e1*x+e2*y = 1); assign(sol); x := x; y := y;
+                           x := 20120
+                          y := -33839
+;
+> e1*x+e2*y = 1;
+                             1 = 1
+;
+> d1 := `mod`(`&^`(c1, x), n); d2 := `mod`(`&^`(c2, abs(y)), n);
+                        d1 := 1404713293
+                        d2 := 134097508
+;
+> dn2 := 'dn2'; t := msolve(d2*dn2 = 1, n); assign(t); dn2; m2 := `mod`(dn2*d1, n);
+                           1166923035
+                          m2 := 59706
+;
+> m2-m;
+                               0
+;
+> 
+;
+

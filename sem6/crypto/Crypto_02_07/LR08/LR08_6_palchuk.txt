@@ -1,0 +1,43 @@
+> NULL;
+> with(numtheory);
+> with(RandomTools);
+> p := nextprime(Generate(integer(range = 2 .. 10^3)));
+                            p := 863
+;
+> q := nextprime(Generate(integer(range = 2 .. 10^3)));
+                            q := 761
+;
+> N := p*q;
+                          N := 656743
+;
+> phi_N := (p-1)*(q-1);
+                        phi_N := 655120
+;
+> nextprime(Generate(integer(range = 2 .. 10^2))); while igcd(e, phi_N) <> 1 do e := nextprime(Generate(integer(range = 2 .. 10^2))) end do;
+> e;
+                              101
+;
+> m := `mod`(Generate(integer(range = 2 .. 10^10)), N);
+                          m := 592598
+;
+> c := `mod`(`&^`(m, e), N);
+                          c := 330748
+;
+> a := -1; k := 1; ek := e; while a <> c do ek := e^k; a := `mod`(`&^`(c, ek), N); k := k+1 end do; ek := ek/e; m1 := `mod`(`&^`(c, ek), N);
+                            a := -1
+                             k := 1
+                           ek := 101
+ek := 2189888152303796000144647908899360454721532468601445541083\
+
+  579887882624411467018504651839577865602290[...1350 
+
+   digits...]685229042063840355898325688724667240620173984169767\
+
+  6286964137128835282872775439903577319736629857301
+                          m1 := 592598
+;
+> m1-m;
+                               0
+;
+> 
+;

@@ -1,0 +1,16 @@
+> with(numtheory); p1 := nextprime(67423); p2 := nextprime(26463); rA := p1*p2; a := 53; igcd(a, phi(rA)); o := `mod`(`&^`(a, phi(phi(rA))-1), phi(rA));
+                          p1 := 67427
+                          p2 := 26479
+                        rA := 1785399533
+                            a := 53
+                               1
+                         o := 673700237
+;
+> s := `mod`(1279856, rA); g := `mod`(`&^`(s, a), rA); s1 := `mod`(`&^`(g, o), rA); s1-s;
+                          s := 1279856
+                        g := 1502461485
+                         s1 := 1279856
+                               0
+;
+> 
+;

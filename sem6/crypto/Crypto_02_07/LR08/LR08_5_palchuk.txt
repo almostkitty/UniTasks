@@ -1,0 +1,58 @@
+> NULL;
+> with(numtheory);
+> with(RandomTools);
+> e := 3;
+                             e := 3
+;
+> p1 := nextprime(Generate(integer(range = 2 .. 10^5)));
+                          p1 := 40697
+;
+> q1 := nextprime(Generate(integer(range = 2 .. 10^5)));
+                          q1 := 73597
+;
+> n1 := p1*q1;
+                        n1 := 2995177109
+;
+> p2 := nextprime(Generate(integer(range = 2 .. 10^5)));
+                          p2 := 13619
+;
+> q2 := nextprime(Generate(integer(range = 2 .. 10^5)));
+                          q2 := 65551
+;
+> n2 := p2*q2;
+                        n2 := 892739069
+;
+> p3 := nextprime(Generate(integer(range = 2 .. 10^5)));
+                          p3 := 19391
+;
+> q3 := nextprime(Generate(integer(range = 2 .. 10^5)));
+                           q3 := 2351
+;
+> n3 := p3*q3;
+                         n3 := 45588241
+;
+> igcd(n1, n2); igcd(n1, n3); igcd(n2, n3);
+                               1
+                               1
+                               1
+;
+> igcd(n1, e); igcd(n2, e); igcd(n3, e);
+                               1
+                               1
+                               1
+;
+> m := `mod`(`mod`(`mod`(Generate(integer(range = 2 .. 10^10)), n1), n2), n3);
+                         m := 34094331
+;
+> y1 := `mod`(`&^`(m, e), n1); y2 := `mod`(`&^`(m, e), n2); y3 := `mod`(`&^`(m, e), n3);
+                        y1 := 1877344059
+                        y2 := 745149195
+                         y3 := 42574485
+;
+> c := chrem([y1, y2, y3], [n1, n2, n3]); M := root(c, e); m-M;
+                  c := 39632048377820302466691
+                         M := 34094331
+                               0
+;
+> 
+;

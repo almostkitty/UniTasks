@@ -1,0 +1,51 @@
+> NULL;
+> with(numtheory);
+> with(RandomTools);
+> p := nextprime(Generate(integer(range = 2 .. 10^10)));
+                        p := 5244301331
+;
+> q := nextprime(Generate(integer(range = 2 .. 10^10)));
+                        q := 9913502003
+;
+> n := p*q;
+                   n := 51989391749204065993
+;
+> phi_n := (p-1)*(q-1);
+                 phi_n := 51989391734046262660
+;
+> N := Generate(integer(range = 2 .. 10^5));
+                           N := 26725
+;
+> NULL;
+> e := nextprime(Generate(integer(range = 2 .. 10^4)));
+                           e := 9769
+;
+> igcd(e, phi_n);
+                               1
+;
+> x := 13;
+                            x := 13
+;
+> y := `mod`(`&^`(x, e), n);
+                   y := 10356483682172953594
+;
+> M := y*N;
+                 M := 276777026406072184799650
+;
+> d := `mod`(`&^`(e, phi(phi_n)-1), phi_n);
+                   d := 37018958839392548169
+;
+> res_d := `mod`(`&^`(N, d), n);
+                  res_d := 1716026792572362801
+;
+> Z := `mod`(`&^`(M, d), n);
+                   Z := 22308348303440716413
+;
+> res := `mod`(Z/x, n);
+                   res := 1716026792572362801
+;
+> res-res_d;
+                               0
+;
+> 
+;

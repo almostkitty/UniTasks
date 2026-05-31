@@ -1,0 +1,44 @@
+> NULL;
+> with(numtheory);
+> with(RandomTools);
+> p := nextprime(Generate(integer(range = 2 .. 10^4)));
+                           p := 7933
+;
+> a := nextprime(Generate(integer(range = 2 .. 10^4)));
+                           a := 8059
+;
+> igcd(a, p-1);
+                               1
+;
+> alpha := `mod`(`&^`(a, phi(phi(p))-1), phi(p));
+                         alpha := 5059
+;
+> b := nextprime(Generate(integer(range = 2 .. 10^4)));
+                             b := 7
+;
+> igcd(b, p-1);
+                               1
+;
+> beta := `mod`(`&^`(b, phi(phi(p))-1), phi(p));
+                          beta := 6799
+;
+> m := `mod`(Generate(integer(range = 10^5 .. 10^15)), p-1);
+                           m := 6652
+;
+> m1 := `mod`(`&^`(m, a), p);
+                           m1 := 1339
+;
+> m2 := `mod`(`&^`(m1, b), p);
+                           m2 := 668
+;
+> m3 := `mod`(`&^`(m2, alpha), p);
+                           m3 := 6353
+;
+> m4 := `mod`(`&^`(m3, beta), p);
+                           m4 := 6652
+;
+> m-m4;
+                               0
+;
+> 
+;

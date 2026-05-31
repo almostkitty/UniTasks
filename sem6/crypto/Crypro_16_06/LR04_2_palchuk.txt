@@ -1,0 +1,27 @@
+> with(numtheory); with(RandomTools); hash := proc (x) options operator, arrow; `mod`(x, 5) end proc; p1 := nextprime(2345); p2 := nextprime(1243); M := p1*p2; ifactor(M);
+                    hash := x -> `mod`(x, 5)
+                           p1 := 2347
+                           p2 := 1249
+                          M := 2931403
+                         (1249) (2347)
+;
+> d := 8237; igcd(d, phi(M));
+                           d := 8237
+                               1
+;
+> d*e = `mod`(1, phi(M)); e := `mod`(`&^`(d, phi(phi(M))-1), phi(M));
+                           8237 e = 1
+                          e := 617765
+;
+> x := `mod`(625963423654, M);
+                          x := 421243
+;
+> s := `mod`(`&^`(hash(x), d), M); x1 := `mod`(`&^`(s, e), M);
+                          s := 1028491
+                            x1 := 3
+;
+> hash(x)-x1;
+                               0
+;
+> 
+;

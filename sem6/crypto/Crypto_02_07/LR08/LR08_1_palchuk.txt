@@ -1,0 +1,28 @@
+> ;
+> with(numtheory); with(RandomTools);
+> q1 := nextprime(Generate(integer(range = 2 .. 10^15))); q2 := nextprime(Generate(integer(range = 2 .. 10^15))); e := nextprime(Generate(integer(range = 2 .. 10^15))); rB := q1*q2;
+                     q1 := 487479369965321
+                     q2 := 557378672205757
+                      e := 621417209509867
+              rB := 271710603958969597759666552997
+;
+> m1 := `mod`(Generate(integer(range = 2 .. 10^15)), rB);
+                     m1 := 844447354302435
+;
+> st := time(); s := ifactors(rB); time()-st; p1 := s[2][1][1]; p2 := s[2][2][1];
+     s := [1, [[487479369965321, 1], [557378672205757, 1]]]
+                             0.063
+                     p1 := 487479369965321
+                     p2 := 557378672205757
+;
+> phi_b := phi(p1)*phi(p2);
+            phi_b := 271710603958968552901624381920
+;
+> d := `mod`(`&^`(e, phi(phi_b)-1), phi_b);
+               d := 50037766859499231143582581603
+;
+> `mod`(d*e, phi_b);
+                               1
+;
+> 
+;
